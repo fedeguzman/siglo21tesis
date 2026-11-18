@@ -16,7 +16,10 @@ const shopSchema=z.object({name:z.string().trim().min(3).max(120),phone:z.string
 export function createApp(db,{local=process.env.APP_MODE==='local',supabaseUrl=process.env.SUPABASE_URL,supabaseKey=process.env.SUPABASE_ANON_KEY}={}){
  assert(!(local&&process.env.NODE_ENV==='production'),500,'El modo local está prohibido en producción.');
  const auth=local?null:createClient(supabaseUrl,supabaseKey,{auth:{persistSession:false}});
- const app=express();app.use(helmet());app.use(cors({origin:process.env.WEB_ORIGIN||'http://localhost:5173'}));app.use(express.json({limit:'100kb'}));
+ const app=express();
+ // Render's ingress supplies the client address; trust only the nearest proxy.
+ if(process.env.RENDER==='true')app.set('trust proxy',1);
+ app.use(helmet());app.use(cors({origin:process.env.WEB_ORIGIN||'http://localhost:5173'}));app.use(express.json({limit:'100kb'}));
  app.use('/api',rateLimit({windowMs:60000,limit:180}));
  app.get('/api/health',async(req,res)=>{await db.query('select 1');res.json({status:'ok',mode:local?'local':'supabase'});});
  if(local)app.use('/api/photos',express.static(photosDirectory,{dotfiles:'deny'}));

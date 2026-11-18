@@ -20,3 +20,19 @@ test('API exige autenticación y valida roles y campos',async()=>{assert.equal((
 
 test('muchos consumidores compiten sin stock negativo y todos los rechazos son por disponibilidad',async()=>{const l=await lot(5);const attempts=await Promise.allSettled(Array.from({length:20},()=>reserve(db,buyer,l.id,1)));assert.equal(attempts.filter(r=>r.status==='fulfilled').length,5);for(const r of attempts.filter(r=>r.status==='rejected'))assert.equal(r.reason.status,409);const {rows:[v]}=await db.query('select available,status from lots where id=$1',[l.id]);assert.equal(v.available,0);assert.equal(v.status,'sold_out');});
 test('dos cancelaciones concurrentes restituyen una sola vez la unidad',async()=>{const l=await lot(1),r=await reserve(db,buyer,l.id,1);const attempts=await Promise.allSettled([transition(db,buyer,r.id,'cancel'),transition(db,buyer,r.id,'cancel')]);assert.equal(attempts.filter(x=>x.status==='fulfilled').length,1);assert.equal((await db.query('select available from lots where id=$1',[l.id])).rows[0].available,1);});
+
+test('Render limita solicitudes por cliente y no comparte el cupo del proxy',async()=>{
+ const previous=process.env.RENDER;process.env.RENDER='true';let app;
+ try{app=createApp(db,{local:true});}finally{if(previous===undefined)delete process.env.RENDER;else process.env.RENDER=previous;}
+ const proxyServer=app.listen(0);await new Promise(r=>proxyServer.once('listening',r));
+ try{
+  const endpoint='http://localhost:'+proxyServer.address().port+'/api/health';
+  const first=await fetch(endpoint,{headers:{'X-Forwarded-For':'198.51.100.1'}});
+  const other=await fetch(endpoint,{headers:{'X-Forwarded-For':'198.51.100.2'}});
+  const repeat=await fetch(endpoint,{headers:{'X-Forwarded-For':'198.51.100.1'}});
+  assert.equal(first.status,200);assert.equal(other.status,200);
+  assert.equal(first.headers.get('x-ratelimit-remaining'),'179');
+  assert.equal(other.headers.get('x-ratelimit-remaining'),'179');
+  assert.equal(repeat.headers.get('x-ratelimit-remaining'),'178');
+ }finally{await new Promise(r=>proxyServer.close(r));}
+});

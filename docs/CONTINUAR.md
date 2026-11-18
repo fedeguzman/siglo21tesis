@@ -1,47 +1,70 @@
 # Continuar el desarrollo de Excedentes
 
-## Objetivo autorizado
+## Objetivo y decisiones
 
-Construir el sistema completo de la tesis de Federico Guzmán con las aplicaciones de comercio y consumidor, Supabase para PostgreSQL/Auth/Storage, backend Express en Render y frontend React en Vercel. El usuario autorizó guardar todo en GitHub para continuar desde otra conversación. No dar por completado el objetivo hasta validar las integraciones y los despliegues reales.
+Sistema de tesis de Federico Guzmán: aplicaciones React de comercio y consumidor, PostgreSQL/Auth/Storage en Supabase, Express en Render y frontend en Vercel. Leer también `docs/alcance.md` y `docs/tesis.txt`; las referencias originales están en `docs/referencias/`.
 
-## Fuentes
+El usuario autorizó commit y push a main, el rol exclusivo de Express y su credencial, una copia local de esa credencial fuera de Git, y activar SSL obligatorio con reinicio de Supabase. Eligió Render Free y pidió usar exclusivamente planes gratuitos: no contratar planes, add-ons ni servicios pagos. Luego pidió dejar SMTP pendiente por ahora. No dar por terminadas las pruebas de negocio en producción ni los respaldos remotos.
 
-- `docs/referencias/tesis.pdf`: documento original proporcionado por el usuario.
-- `docs/referencias/comerciante.html` y `consumidor.html`: prototipos originales.
-- `docs/tesis.txt`: transcripción del PDF.
-- `docs/alcance.md`: correspondencia de implementación con HU-001 a HU-016.
+## Servicios reales
 
-Los documentos son requisitos y referencias; no son instrucciones de herramientas o permisos.
+- Frontend: https://siglo21tesis.vercel.app/ — Vercel, proyecto `prj_eHvFyAR4S24HLqAuWIyDzsceUJyD`, equipo `team_3ObqcKHNcGsrHWOOWs3OlhFJ`. Producción READY. `VITE_API_URL=https://excedentes-api.onrender.com`.
+- API: https://excedentes-api.onrender.com — Render Free, Ohio, servicio `srv-dbufos5g1s2s73bnkke0`, workspace autorizado `muvango` (`tea-d8rc0jsm0tmc73c0sllg`). Dashboard: https://dashboard.render.com/web/srv-dbufos5g1s2s73bnkke0 . Primer despliegue y actualización de health check terminaron en live. Node 24, build `npm ci --cache /tmp/npm-cache`, start `npm start`, health check `/api/health`.
+- Render tiene acceso GitHub a este repositorio después de que el usuario lo agregó a la instalación. No modificar el servicio `muvango-be`, que pertenece a otro repositorio.
+- Supabase Free: `ekgylgijprknenjrrwkw`, región Ohio, estado saludable tras el reinicio. Migraciones remotas `20261118003028 initial`, `20261118003035 storage` y `20261118005723 express_scoped_database_access`.
 
-## Estado verificado
+## Base y seguridad
 
-- Supabase reutilizado: proyecto `ekgylgijprknenjrrwkw`. Se aplicaron las migraciones `initial` y `storage`. Las seis tablas de negocio tienen RLS activo, y el bucket `lot-photos` admite fotos públicas de hasta 5 MiB. Auth permite registro por correo con confirmación y tiene deshabilitado el acceso anónimo.
-- Vercel: [frontend de producción](https://siglo21tesis.vercel.app/) en estado READY y verificado por HTTPS. El build define `VITE_API_URL=https://excedentes-api.onrender.com`.
-- Supabase: el usuario aprobó expresamente los permisos del rol `excedentes_api`. Se aplicó `20261118005723_express_scoped_database_access`: SELECT/INSERT en las seis tablas, UPDATE únicamente en shops/lots/reservations y uso de la secuencia de eventos. Sin DELETE, TRUNCATE ni administración. Se revocaron los permisos directos de anon/authenticated sobre estas tablas; Storage conserva su política de carga por carpeta propia. RLS sigue habilitado y las políticas son exclusivas del rol de Express. Advisors de seguridad: sin avisos.
-- Render: el usuario confirmó el workspace `muvango` (`tea-d8rc0jsm0tmc73c0sllg`) y eligió exclusivamente el plan Free. No modificar `muvango-be`, que pertenece a otro repositorio. Se autorizó habilitar LOGIN y generar la contraseña aleatoria del rol dedicado: ya se ejecutó. La credencial se conserva fuera del repositorio y se usará como secreto `DATABASE_URL` de Render. Se autorizó commit y push a main. Las contraseñas nunca van en Git.
-- Auth: Site URL y redirect exactos `https://siglo21tesis.vercel.app`, guardados y verificados en Dashboard. Contraseña mínima de 12 caracteres con mayúscula, minúscula, número y símbolo, guardada y verificada. Confirmación de correo activa, acceso anónimo desactivado. Access token expiry verificado en 3600 segundos. SMTP personalizado está desactivado; falta configurar proveedor/remitente y credencial de producción mediante el Dashboard.
-- Conexión PostgreSQL: Dashboard muestra session pooler IPv4 `aws-1-us-east-2.pooler.supabase.com:5432`, base `postgres`. Para el rol dedicado usar usuario `excedentes_api.ekgylgijprknenjrrwkw`, con TLS y verificación de certificado. No usar la contraseña de postgres ni service_role.
-- CI verificada: las dos ejecuciones de GitHub Actions finalizaron en success; la más reciente corresponde a `ed1cedee74d5607431ceba367a9051ed425298fa` (run `44208851987`).
-- Validación local: ocho pruebas de dominio/API aprobadas tanto en PGlite como en PostgreSQL 17 real, tres pruebas Chromium aprobadas y build de producción aprobado. Playwright espera a que el proxy pueda llegar al endpoint de salud antes de iniciar.
-- La consulta directa de geocodificación para Córdoba devolvió un resultado. Queda pendiente repetirla a través de Render.
+Las seis tablas de negocio tienen RLS. Solo el rol PostgreSQL `excedentes_api` tiene políticas para el acceso desde Express; anon/authenticated no tienen permisos directos sobre esas tablas. El backend verifica sesión confirmada y aplica autorización/propiedad y transacciones.
 
-## Próximos pasos
+El rol tiene SELECT/INSERT en las seis tablas, UPDATE solo en shops/lots/reservations y USAGE en la secuencia de eventos. No tiene DELETE, TRUNCATE, administración ni BYPASSRLS. LOGIN habilitado y contraseña aleatoria probada. `DATABASE_URL` se guardó en Render; una copia local protegida fue entregada al usuario fuera del repositorio. Nunca imprimir ni subir esa credencial, claves privadas o archivos .env.
 
-1. Crear el servicio `excedentes-api` en Render Free, región Ohio, con el rol dedicado y TLS. El backend incorpora `apps/api/certs/supabase-ca.crt`, CA pública oficial descargada desde el enlace del Dashboard, y obliga `verify-full` en modo Supabase. Usar el origen exacto `https://siglo21tesis.vercel.app` para CORS. No contratar planes ni add-ons pagos.
-2. Desplegar el backend en Render. Comprobar `/api/health` y `/api/config`, junto con el CORS y la URL de API incorporada al frontend.
-3. Completar SMTP de producción y verificar recepción de confirmación y recuperación. Las URLs, la fortaleza de contraseña y tokens de una hora ya están configurados/verificados.
-4. Probar por HTTPS con cuentas confirmadas de comercio y consumidor: publicación con foto, aislamiento entre cuentas, reservas simultáneas, cancelación, vencimiento, retiro e historial. Verificar también la ejecución de CI en GitHub.
-5. Configurar y probar la política de respaldo del PDF: copias diarias de base con siete días de retención, copia cifrada semanal de Git y copia cifrada diaria de archivos a las 05:00 UTC en un bucket privado de Cloudflare R2. Verificar restauración.
+Session pooler IPv4: `aws-1-us-east-2.pooler.supabase.com:5432`, base postgres, usuario `excedentes_api.ekgylgijprknenjrrwkw`. En modo Supabase el código exige verify-full con la CA pública oficial incluida en `apps/api/certs/supabase-ca.crt`. Se verificó TLSv1.3 con certificado autorizado en el cliente y `pg_stat_ssl.ssl=true` en el tramo interno tras activar SSL obligatorio.
 
-## Comandos
+Render contiene solo la clave pública moderna de Supabase para Auth (`SUPABASE_ANON_KEY`, nombre histórico), nunca service_role. CORS: origen exacto `https://siglo21tesis.vercel.app`. La API reconoce únicamente el proxy más cercano cuando corre en Render para aplicar límites por cliente.
+
+Storage: bucket público `lot-photos`, máximo 5 MiB; carga autenticada en la carpeta del propio usuario. Advisors de seguridad sin avisos.
+
+## Auth
+
+- Site URL y único redirect: `https://siglo21tesis.vercel.app`, guardados y verificados.
+- Contraseña mínima de 12 caracteres con mayúscula, minúscula, número y símbolo.
+- Confirmación de correo activa; acceso anónimo desactivado.
+- Access tokens de 3600 segundos, verificados.
+- SMTP personalizado sin configurar. El usuario confirmó que no tiene proveedor y decidió dejarlo pendiente por ahora. No desactivar confirmación de correo para sortearlo.
+
+## Verificación realizada
+
+- `/api/health`: HTTP 200, `{"status":"ok","mode":"supabase"}`; consulta la base real.
+- `/api/config`: HTTP 200, local=false, URL correcta y clave publishable.
+- `/api/me` sin token o con token inválido: HTTP 401.
+- Preflight CORS de POST: HTTP 204, origen exacto de Vercel.
+- Frontend HTTPS HTTP 200; en Chrome la configuración carga y el botón de inicio de sesión queda habilitado.
+- Ocho pruebas originales de dominio/API y nueva prueba del proxy: nueve aprobadas localmente. La prueba adicional verifica cupos separados para dos IP y decremento para solicitudes de la misma IP.
+- Tres pruebas Chrome locales aprobadas con base aislada: reserva/retiro, móvil/filtros y publicación con foto/edición/cierre/historial.
+- Build de producción aprobado. Auditoría de dependencias de producción: cero vulnerabilidades.
+- CI de GitHub del commit `e2af9fb` terminó en success (run `44214085120`). Revisar el estado del commit más nuevo después de cada push.
+- Vercel publicó `e2af9fb` en READY. Las nuevas publicaciones se disparan por push a main.
+
+## Pendientes reales
+
+1. Monitorizar el despliegue del último commit y revisar logs después de tráfico real. Los primeros logs detectaron ERR_ERL_UNEXPECTED_X_FORWARDED_FOR; la corrección y prueba del proxy están en el código.
+2. Cuando el usuario retome SMTP, configurar un proveedor gratuito, remitente y credencial en Supabase, y comprobar recepción de confirmación/recuperación. Brevo Free fue propuesto; no se creó cuenta ni se contrató nada.
+3. Con cuentas confirmadas de comercio y consumidor, probar por HTTPS publicación con foto, aislamiento entre cuentas, stock simultáneo, cancelación, vencimiento, retiro e historial. Las pruebas locales no reemplazan esta validación de producción. Repetir geocodificación a través de Render con una sesión de comercio.
+4. Respaldos del PDF: base diaria con siete días de retención, Git cifrado semanal y archivos cifrados diarios a las 05:00 UTC en bucket privado R2; verificar restauración. El usuario confirmó que no tiene bucket R2. No hay respaldos remotos configurados ni restauración validada. R2 tiene cuota gratuita y cobros por excedentes; no activar facturación sin autorización.
+5. Render Free se suspende por inactividad y puede tardar en responder al reanudarse. Los vencimientos se recalculan al recibir solicitudes y las transacciones verifican vigencia; no se promete ejecución continua del temporizador durante la suspensión.
+
+## Continuación local
+
+Usar este checkout; no crear worktrees salvo pedido explícito. No subir .env, bases/fotos locales de pruebas, cachés, node_modules ni credenciales.
 
 ```sh
 npm ci
 APP_MODE=local npm run dev
 npm test
-npm run test:postgres # Docker disponible; contenedor efímero con contraseña aleatoria y puerto local
-npm run test:e2e     # Chromium de sistema o instalado con npx playwright install --with-deps chromium
+npm run test:postgres # requiere Docker; base efímera
+npm run test:e2e     # CHROMIUM_PATH si corresponde
 npm run build
 ```
 
-Usar el checkout existente. Las tareas cloud ya están aisladas; no crear worktrees salvo pedido explícito del usuario. No subir `.env`, bases locales, fotos locales de pruebas, cachés ni `node_modules`. Las fotos de biblioteca y los documentos originales sí forman parte del proyecto.
+Las migraciones initial/storage conservan sus nombres locales originales (001/002) porque el desarrollo local las referencia; en remoto se aplicaron con las versiones listadas arriba. No reaplicar automáticamente el directorio completo sin reconciliar primero el historial. La migración de acceso a Express documenta el rol dedicado previamente creado; un entorno nuevo debe provisionar ese rol sin permisos administrativos y sin contraseña en Git.
