@@ -1,0 +1,20 @@
+{
+  "name": "excedentes",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -k \"npm run dev -w apps/api\" \"npm run dev -w apps/web\"",
+    "build": "npm run build -w apps/web",
+    "test": "node --test tests/*.test.js",
+    "start": "npm start -w apps/api",
+    "test:e2e": "playwright test",
+    "test:postgres": "node scripts/test-postgres.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "concurrently": "^10.0.7"
+  }
+}

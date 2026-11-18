@@ -1,0 +1,21 @@
+{
+  "name": "@excedentes/api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file-if-exists=../../.env --watch src/server.js",
+    "start": "node --env-file-if-exists=../../.env src/server.js",
+    "migrate": "node --env-file-if-exists=../../.env src/migrate.js"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.5.16",
+    "@supabase/supabase-js": "^2.89.0",
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.1.0",
+    "multer": "^2.5.0",
+    "pg": "^8.16.3",
+    "zod": "^4.2.1"
+  }
+}

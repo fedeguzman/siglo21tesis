@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: excedentes-api
+    runtime: node
+    plan: starter
+    buildCommand: npm ci --cache /tmp/npm-cache
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: APP_MODE
+        value: supabase
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: WEB_ORIGIN
+        sync: false

@@ -1,0 +1,2290 @@
+                       Universidad Siglo 21
+
+
+
+
+          Trabajo Final de Grado. Prototipado Tecnológico
+                   Carrera: Ingeniería en Software
+
+Plataforma de gestión de excedentes alimentarios para comercios
+                         gastronómicos
+
+
+                   Autor: Federico Guzmán
+                     Legajo: SOF01657
+                 Tutor: Cassi, Jorge Humberto
+
+
+
+
+                    Córdoba, noviembre de 2026
+                                                                                                                                         1
+
+
+                                                                Índice
+
+
+Resumen.............................................................................................................................. 7
+
+Abstract ............................................................................................................................... 8
+
+Título ................................................................................................................................... 9
+
+Introducción ........................................................................................................................ 9
+
+   Antecedentes ................................................................................................................... 9
+
+   Descripción del área problemática ................................................................................ 10
+
+Justificación ...................................................................................................................... 11
+
+Objetivo del proyecto ........................................................................................................ 12
+
+Objetivos específicos del proyecto ................................................................................... 12
+
+Marco Teórico Referencial ............................................................................................... 13
+
+   Dominio del problema .................................................................................................. 13
+
+   T.I.C (Tecnología de la Información y la Comunicación) ............................................ 13
+
+   Competencia ................................................................................................................. 14
+
+Diseño metodológico ........................................................................................................ 15
+
+   Herramientas metodológicas ......................................................................................... 15
+
+   Herramientas de desarrollo ........................................................................................... 15
+
+   Recolección de datos..................................................................................................... 15
+
+   Planificación del proyecto............................................................................................. 16
+
+Relevamiento .................................................................................................................... 16
+
+   Relevamiento Estructural .............................................................................................. 16
+
+   Relevamiento funcional ................................................................................................ 16
+
+   Relevamiento de documentación .................................................................................. 19
+
+Proceso de negocios .......................................................................................................... 20
+                                                                                                                                     2
+
+
+Diagnóstico y Propuesta ................................................................................................... 21
+
+   Propuesta ....................................................................................................................... 24
+
+Objetivos, Límites y Alcance del Prototipo ...................................................................... 25
+
+   Objetivo del prototipo ................................................................................................... 25
+
+   Límites .......................................................................................................................... 25
+
+   Alcance ......................................................................................................................... 25
+
+Descripción del sistema .................................................................................................... 26
+
+   Product Backlog ............................................................................................................ 26
+
+   Historias de Usuario...................................................................................................... 27
+
+   Sprint Backlog .............................................................................................................. 36
+
+   Estructura de datos ........................................................................................................ 40
+
+   Prototipo de interfaces de pantallas .............................................................................. 41
+
+   Diagrama de Arquitectura ............................................................................................. 49
+
+Seguridad .......................................................................................................................... 51
+
+   Acceso a la aplicación ................................................................................................... 51
+
+   Roles de usuario ............................................................................................................ 52
+
+   Política de Respaldo de la información ........................................................................ 52
+
+Análisis de Costos ............................................................................................................. 53
+
+   Equipo ........................................................................................................................... 53
+
+   Recursos Técnicos ........................................................................................................ 54
+
+Análisis de Riesgos ........................................................................................................... 55
+
+   Identificación y análisis cualitativo de riesgos ............................................................. 55
+
+   Matriz de Riesgos ......................................................................................................... 57
+
+   Análisis cuantitativo y priorización de riesgos ............................................................. 57
+
+   Plan de contingencia ..................................................................................................... 60
+                                                                                                                                      3
+
+
+Conclusiones ..................................................................................................................... 62
+
+Demo ................................................................................................................................. 63
+
+Referencias ........................................................................................................................ 64
+
+Anexo ................................................................................................................................ 67
+
+   Anexo 1. Guía de Entrevista a Comercios .................................................................... 67
+
+   Anexo 2. Ejemplo del registro de excedentes y reservas del comercio ........................ 68
+
+   Anexo 3. Consultas por redes sociales .......................................................................... 68
+                                                                                                                            4
+
+
+                                           Índice de ilustraciones
+
+
+Ilustración 1 - Diagrama de Gantt ..................................................................................... 16
+Ilustración 2 - Proceso de Negocios.................................................................................. 20
+Ilustración 3 - Diagrama Entidad-Relación ...................................................................... 40
+Ilustración 4 - Inicio de sesión .......................................................................................... 41
+Ilustración 5 - Creación de cuenta .................................................................................... 42
+Ilustración 6 - Registrar comercio..................................................................................... 42
+Ilustración 7 - Dashboard de resumen del día ................................................................... 43
+Ilustración 8 - Lotes disponibles ....................................................................................... 43
+Ilustración 9 - Creación de un nuevo lote ......................................................................... 44
+Ilustración 10 - Reservas recibidas ................................................................................... 44
+Ilustración 11 - Validar retiro ........................................................................................... 45
+Ilustración 12 - Confirmar entrega .................................................................................... 45
+Ilustración 13 - Datos de una reserva ................................................................................ 46
+Ilustración 14 - Historial e indicadores ............................................................................. 46
+Ilustración 15 - Inicio de sesión y creación de cuenta Consumidor ................................. 47
+Ilustración 16 - Confirmar reserva .................................................................................... 48
+Ilustración 17 - Mis reservas ............................................................................................. 48
+Ilustración 18 - Diagrama de arquitectura ........................................................................ 50
+Ilustración 19 - Priorización de riesgos de exposición ..................................................... 60
+Ilustración 20 - Ejemplo del registro de excedentes ......................................................... 68
+Ilustración 21 - Ejemplos de reservas realizadas con sus estados .................................... 68
+Ilustración 22 - Ejemplos de conversaciones con clientes ................................................ 69
+                                                                                                                            5
+
+
+                                                 Índice de tablas
+
+
+Tabla 1 - Comparación de soluciones .............................................................................. 15
+Tabla 2 - Diagnóstico del proceso. Identificación de productos disponibles ................... 21
+Tabla 3 - Diagnóstico del proceso. Control del excedente. .............................................. 22
+Tabla 4 - Diagnóstico del proceso. Comunicación de las promociones. .......................... 22
+Tabla 5 - Diagnóstico del proceso. Gestión de consultas y reservas. ............................... 23
+Tabla 6 - Diagnóstico del proceso. Retiro del pedido. ...................................................... 24
+Tabla 7 - Product Backlog ................................................................................................ 26
+Tabla 8 - HU-001 Registro de usuario .............................................................................. 27
+Tabla 9 - HU-002 Inicio de sesión .................................................................................... 27
+Tabla 10 - HU-003 Registro del comercio ........................................................................ 28
+Tabla 11 - HU-004 Actualización del perfil del comercio ............................................... 29
+Tabla 12 - HU-005 Publicación de un lote. ...................................................................... 29
+Tabla 13- HU-006 Edición y cierre de un lote .................................................................. 30
+Tabla 14 - HU-007 Actualización de disponibilidad ....................................................... 30
+Tabla 15 - HU-008 Búsqueda de lotes .............................................................................. 31
+Tabla 16 - HU-009 Consulta del detalle de un lote .......................................................... 31
+Tabla 17 - HU-010 Reserva de un lote ............................................................................. 32
+Tabla 18 - HU-011 Consulta de la reserva y del código de retiro .................................... 32
+Tabla 19 - HU-012 Cancelación de una reserva ............................................................... 33
+Tabla 20 - HU-013 Gestión de reservas del comercio ...................................................... 33
+Tabla 21 - HU-014 Confirmación del retiro ..................................................................... 34
+Tabla 22- HU-015 Expiración de una reserva .................................................................. 34
+Tabla 23 - HU-016 Consulta de historial e indicadores .................................................... 35
+Tabla 24 - Sprint Backlog ................................................................................................. 39
+Tabla 25 - Permisos de los perfiles de la aplicación ......................................................... 52
+Tabla 26 - Distribución del esfuerzo del proyecto. ........................................................... 53
+Tabla 27 - Costo de desarrollo por rol. ............................................................................. 54
+Tabla 28 - Costos técnicos. ............................................................................................... 55
+Tabla 29 - Riesgos identificados en el Proyecto ............................................................... 56
+                                                                                                                          6
+
+
+Tabla 30 - Matriz de Riesgos ............................................................................................ 57
+Tabla 31 - Análisis cuantitativo y priorización de riesgos. ............................................... 59
+Tabla 32 - Plan de contingencias ...................................................................................... 61
+                                                                                                  7
+
+
+
+                                            Resumen
+
+El trabajo abordó la gestión de excedentes alimentarios en comercios gastronómicos. En el
+comercio tomado como referencia, la publicación de promociones, el control de cantidades y la
+coordinación de retiros se encontraban distribuidos entre anotaciones y mensajes.
+El objetivo fue diseñar e implementar una plataforma web que centralizara esas actividades y
+facilitara a los consumidores el acceso a alimentos a precios reducidos. Se utilizó el caso de una
+panadería y rotisería para analizar el proceso e identificar necesidades de los usuarios.
+El desarrollo se organizó mediante Scrum, con historias de usuario, criterios de aceptación y una
+planificación por sprints. Se utilizaron React para la interfaz, Node.js y Express para el servidor,
+PostgreSQL para el almacenamiento y Supabase Auth para la autenticación.
+Se implementó el flujo principal de publicación de lotes, reserva de unidades y confirmación del
+retiro mediante un código, con almacenamiento de las operaciones.
+El aporte del trabajo consistió en centralizar esas funciones y relacionar la disponibilidad de los
+lotes con el estado de las reservas. Se concluyó que la plataforma ofreció una base para ordenar la
+gestión de excedentes, manteniendo en el comercio la responsabilidad sobre la conservación y
+aptitud de los alimentos.
+
+
+Palabras clave: desperdicio de alimentos, gestión de inventarios, aplicaciones web, reservas.
+                                                                                                 8
+
+
+
+                                           Abstract
+
+This project addressed surplus food management in food businesses. In the reference business,
+promotional offers, stock tracking, and pickup arrangements were handled through separate notes
+and messages.
+The objective was to design and implement a web platform that would bring these activities
+together and help consumers access food at reduced prices. A bakery and prepared-food shop
+served as a reference case for analyzing the process and identifying user needs.
+Development was organized using Scrum, with user stories, acceptance criteria, and sprint
+planning. React was used for the interface, Node.js and Express for the server, PostgreSQL for
+data storage, and Supabase Auth for authentication.
+The main workflow for publishing food batches, reserving units, and confirming pickup using a
+code was implemented, and operation records were stored.
+The project's contribution was to centralize these functions and link batch availability to
+reservation status. It was concluded that the platform provided a foundation for organizing surplus
+food management, while businesses remained responsible for proper food storage and fitness for
+consumption.
+
+
+Keywords: food waste, inventory management, web applications, reservations.
+                                                                                                  9
+
+
+
+                                              Título
+
+       Plataforma de gestión de excedentes alimentarios para comercios gastronómicos
+
+
+                                         Introducción
+
+       Este trabajo aborda una problemática frecuente en panaderías, cafeterías, rotiserías,
+restaurantes y otros comercios gastronómicos: la existencia de alimentos que no se llegan a vender
+durante la jornada, aunque aún se encuentren aptos para el consumo. Cuando estos productos no
+se gestionan a tiempo, el comercio puede perder la posibilidad de recuperar parte de su costo y los
+alimentos pueden terminar siendo descartados.
+       Por este motivo se plantea el diseño y desarrollo de una plataforma web que permita a los
+comercios publicar lotes de productos disponibles e indicar su contenido, cantidad, precio y horario
+de retiro. Los consumidores podrán consultar las opciones cercanas, aplicar filtros, reservar un
+producto o lote y presentar un código para confirmar su retiro.
+       La responsabilidad de la condición sanitaria de los productos siempre estará a cargo del
+comercio.
+
+Antecedentes
+
+       Un alimento tiene una vida útil limitada. Es decir, una vez que se encuentra disponible para
+su comercialización, existe un período en el que puede ser consumido antes de alcanzar su fecha
+de vencimiento, determinada por las características del producto o de la preparación en sí. La
+Organización de las Naciones Unidas para la Alimentación y la Agricultura distingue 2 conceptos:
+pérdida a la que ocurre antes de la venta minorista, mientras que considera desperdicio al
+generado en comercios, servicios gastronómicos y hogares.
+       Esta distinción resulta importante para este proyecto, ya que el problema abordado se
+concentra en productos que llegaron al punto de venta y no fueron comercializados dentro del
+período esperado (Organización de las Naciones Unidas para la Alimentación y la Agricultura
+[FAO], 2019).
+                                                                                               10
+
+
+       El Programa de las Naciones Unidas para el Medio Ambiente estimó que, durante 2022, se
+desperdiciaron 1.050 millones de toneladas de alimentos en hogares, comercios minoristas y
+servicios de alimentación. De ese total, 290 millones de toneladas correspondieron al sector de
+servicios gastronómicos y 131 millones al comercio minorista (Programa de las Naciones Unidas
+para el Medio Ambiente [PNUMA], 2024). Aunque las cifras globales no describen por sí solas la
+situación de un comercio específico, permiten dimensionar y entender la magnitud del problema.
+En este contexto, contar con información propia de cada comercio, como la cantidad de lotes
+publicados, cuántos fueron retirados y qué volumen quedó sin aprovechar, permite medir de forma
+más concreta el desperdicio generado y el aprovechamiento de los excedentes.
+       En Argentina, la Ley 27.454 creó el Plan Nacional de Reducción de Pérdidas y Desperdicio
+de Alimentos. Entre las acciones previstas se encuentra la promoción de tecnologías e
+innovaciones que contribuyan a reducir pérdidas a lo largo de la cadena (Congreso de la Nación
+Argentina, 2018). Una estimación oficial señala que en Argentina se pierden o desperdician
+alrededor de 16 millones de toneladas de alimentos por año, de las cuales aproximadamente 1,5
+millones corresponden a las etapas de comercialización y consumo (Argentina.gob.ar, 2019).
+       Como antecedente internacional se identificó Too Good To Go, una plataforma que permite
+reservar paquetes de alimentos no vendidos y retirarlos en el comercio. Su funcionamiento muestra
+que este tipo de producto ya se utiliza en otros mercados. Este proyecto se enfocará en las
+necesidades de comercios locales y en la gestión del proceso completo, desde la publicación del
+lote hasta la confirmación de su retiro.
+       Existen estudios que señalan que aprovechar los alimentos excedentes puede generar
+beneficios económicos, sociales y ambientales, siempre que exista una coordinación entre quienes
+los ofrecen y quienes pueden utilizarlos (Michelini et al., 2018). Papargyropoulou et al. (2014)
+sostienen que primero debe intentarse prevenir el desperdicio y que, cuando el excedente ya fue
+generado, es preferible destinarlo al consumo humano antes que descartarlo. El proyecto se enfoca
+en esta última situación, facilitando la comercialización de alimentos que todavía son aptos para
+el consumo.
+
+Descripción del área problemática
+
+       Los comercios gastronómicos trabajan con una demanda que puede variar por día, horario,
+clima, eventos cercanos y hábitos de consumo. Cuando la producción supera las ventas del día,
+                                                                                                  11
+
+
+quedan productos que deben comercializarse en un plazo breve o que ya no pueden ofrecerse
+durante las jornadas siguientes. El problema no se limita a la existencia del excedente; también
+incluye la dificultad para poder comunicarlo a tiempo, mantener actualizada la cantidad disponible
+y coordinar el retiro antes de que el producto deje de estar disponible.
+        En un comercio pequeño, una misma persona puede hacer múltiples tareas. Publicar una
+promoción en una historia de una red social o en un grupo de chats agrega tareas manuales y no
+garantiza que la información permanezca actualizada. Si dos personas consultan por el mismo
+producto, el responsable debe controlar la disponibilidad y responder a cada una. Cuando no existe
+una reserva formal, el consumidor tampoco tiene certeza de que el lote seguirá disponible al llegar
+al local.
+        El problema tecnológico se ve en la falta de un proceso centralizado para gestionar los
+excedentes alimentarios. Actualmente, la información puede encontrarse dispersa o
+desactualizada, lo que dificulta al comercio conocer qué alimentos se encuentran disponibles,
+durante cuánto tiempo pueden ser retirados y cuál fue el resultado final de cada excedente
+generado.
+
+
+                                          Justificación
+
+        La necesidad del proyecto surgió de las dificultades para gestionar los excedentes
+alimentarios en los comercios gastronómicos. En el comercio relevado, los productos disponibles
+se anotaban manualmente y las reservas se coordinaban mediante mensajes. Esta situación
+dificultaba conocer las cantidades restantes y el estado de cada pedido. Por este motivo, se planteó
+una plataforma web que centralizara la información y facilitara la coordinación de las reservas y
+los retiros.
+        Para los comercios, se buscó reducir las tareas manuales relacionadas con la actualización
+de cantidades, la consulta de reservas y la confirmación de las entregas. En términos económicos,
+la propuesta se orientó a ofrecer una posibilidad adicional de recuperar parte del valor de los
+productos que no habían sido vendidos durante la jornada, mediante su comercialización a precios
+reducidos.
+        En el ámbito social, el proyecto se orientó a facilitar el acceso de los consumidores a
+alimentos a precios más bajos que los habituales. Se buscó que contaran con información sobre los
+                                                                                              12
+
+
+productos disponibles, su contenido, precio y horario de retiro para poder comparar opciones y
+organizar su compra. La reserva también se planteó como una forma de disminuir la incertidumbre
+sobre la disponibilidad del pedido antes de acercarse al comercio.
+       Desde el aspecto ambiental, se buscó favorecer el aprovechamiento de alimentos que
+todavía se encontraban aptos para el consumo y que podían terminar descartados si no se
+comercializaban a tiempo. La propuesta se concentró en facilitar su circulación dentro del plazo
+disponible para la venta y el retiro.
+       Desde una perspectiva tecnológica, el aporte se centró en relacionar la disponibilidad de
+los lotes con los cambios de estado de las reservas. Se planteó mantener un seguimiento de las
+operaciones hasta su retiro, cancelación o vencimiento, para que el comercio pudiera conocer el
+resultado de los excedentes publicados y disponer de información para su gestión.
+
+
+                                        Objetivo del proyecto
+
+       Diseñar e implementar una plataforma web que centralice la publicación, búsqueda, reserva
+y confirmación del retiro de excedentes alimentarios aptos para el consumo, con el propósito de
+contribuir a reducir las pérdidas operativas de los comercios gastronómicos y facilitar a los
+consumidores el acceso a alimentos a precios reducidos.
+
+
+                             Objetivos específicos del proyecto
+
+
+- Relevar y analizar la forma en que los comercios gastronómicos gestionan y comunican
+   actualmente los excedentes alimentarios.
+- Identificar necesidades de los comercios y consumidores relacionadas con la publicación,
+   consulta, reserva y retiro de los productos disponibles.
+- Diseñar un sistema informático que permita a los comercios gestionar sus excedentes
+   alimentarios y a los consumidores consultarlos y reservarlos para su retiro.
+                                                                                                  13
+
+
+
+                                 Marco Teórico Referencial
+Dominio del problema
+
+       La Organización de las Naciones Unidas para la Alimentación y la Agricultura distingue
+entre pérdida y desperdicio de alimentos. La pérdida ocurre durante las etapas de producción,
+almacenamiento, transporte y procesamiento, antes de llegar a la venta minorista. En cambio, el
+desperdicio se produce en comercios, servicios gastronómicos y hogares (Organización de las
+Naciones Unidas para la Alimentación y la Agricultura [FAO], 2019).
+       El Programa de las Naciones Unidas para el Medio Ambiente considera desperdicio
+alimentario a los alimentos y sus partes no comestibles que son retirados de la cadena de suministro
+en la venta minorista, los servicios gastronómicos y los hogares (Programa de las Naciones Unidas
+para el Medio Ambiente [PNUMA], 2024). Antes de llegar a esa instancia, un alimento no vendido
+puede conservar su valor y ser aprovechado si todavía reúne las condiciones necesarias para el
+consumo.
+       Papargyropoulou et al. (2014) proponen una jerarquía para el tratamiento de los excedentes
+alimentarios. La primera alternativa es evitar su generación. Cuando el excedente ya existe, se
+prioriza su aprovechamiento para el consumo humano antes que su utilización como alimento para
+animales, reciclaje, recuperación energética o eliminación.
+
+T.I.C (Tecnología de la Información y la Comunicación)
+
+       En el desarrollo del proyecto se emplearon las siguientes tecnologías:
+       React: biblioteca de JavaScript utilizada para construir interfaces de usuario mediante
+componentes reutilizables (React Team, s.f.).
+       Node.js: entorno de ejecución de JavaScript orientado al desarrollo de aplicaciones de red
+mediante un modelo asíncrono basado en eventos (OpenJS Foundation, s.f.).
+       Express: framework web para Node.js que proporciona funciones para desarrollar
+aplicaciones y servicios web (Express.js, s.f.).
+       API REST: interfaz basada en el estilo arquitectónico REST, utilizado para la
+comunicación entre los componentes de una aplicación mediante recursos y operaciones definidas
+(Fielding, 2000).
+                                                                                                14
+
+
+         Supabase Auth: servicio de autenticación y autorización que permite administrar usuarios,
+sesiones y permisos de acceso (Supabase, 2026a).
+         PostgreSQL: sistema de gestión de bases de datos objeto-relacional de código abierto que
+utiliza y extiende el lenguaje SQL (PostgreSQL Global Development Group, s.f.).
+         Diseño web responsivo: enfoque de diseño que permite adaptar la presentación de una
+aplicación a diferentes tamaños de pantalla y dispositivos (MDN Web Docs, 2026).
+         Geocodificación: proceso que permite convertir una dirección en coordenadas geográficas
+y realizar el procedimiento inverso (Google for Developers, 2026).
+
+Competencia
+
+         Como parte del análisis de la competencia, se observaron las siguientes plataformas: Too
+Good To Go, Cheaf y Wobox. Too Good To Go permite consultar comercios cercanos, reservar
+paquetes con alimentos no vendidos y retirarlos dentro del horario indicado por el establecimiento
+(Too Good To Go, s.f.). Cheaf conecta supermercados, restaurantes, panaderías y otros negocios
+que poseen excedentes con consumidores interesados en adquirirlos con descuento (Cheaf, s.f.).
+Wobox permite que los comercios publiquen cajas sorpresa con excedentes en buen estado para
+que los usuarios las compren y retiren en el establecimiento (Wobox, s.f.).
+
+Comparación general de soluciones existentes
+
+
+                                         Modalidad de Reserva          y Orientación          al
+ Solución      Alcance conocido
+                                         la oferta       retiro           comercio
+
+ Too Good Presencia                      Paquetes        Reserva desde Recuperación           de
+ To Go         internacional         en sorpresa     con la aplicación y ingresos y reducción
+               locales gastronómicos descuento           retiro   en   el del descarte
+               y minoristas.                             comercio
+ Cheaf         Supermercados,            Excedentes      Compra        o Monetización         de
+               restaurantes,             ofrecidos con reserva desde la excedentes y llegada a
+               panaderías      y   otros descuento       aplicación    y nuevos consumidores
+               negocios                                  retiro
+                                                                                                   15
+
+
+ Wobox          Comercios               Cajas sorpresa Selección en la Comercialización          de
+                gastronómicos y retail cercanas      al plataforma      y excedentes     en   buen
+                de Argentina            usuario          retiro    en   el estado
+                                                         negocio
+Tabla 1 - Comparación de soluciones
+Fuente: Elaboración propia
+
+
+                                      Diseño metodológico
+Herramientas metodológicas
+
+         Para el desarrollo de este proyecto, se utilizó Scrum. “Scrum es un marco de trabajo liviano
+que ayuda a las personas, equipos y organizaciones a generar valor a través de soluciones
+adaptativas para problemas complejos” (Schwaber & Sutherland, 2020, p. 3).
+
+Herramientas de desarrollo
+
+         La arquitectura propuesta integra las tecnologías definidas anteriormente. La interfaz
+desarrollada con React se comunica mediante una API REST con el servidor implementado en
+Node.js y Express. El servidor concentra las reglas relacionadas con la publicación de lotes, la
+disponibilidad y las reservas, mientras que PostgreSQL almacena la información de los usuarios,
+comercios, lotes y operaciones. Supabase Auth administra la autenticación y los permisos de
+acceso. Por último, el servicio de geocodificación convierte las direcciones de los comercios en
+coordenadas para ordenar las ofertas según la cercanía con el consumidor.
+
+Recolección de datos
+
+         Para recopilar la información se utilizó una entrevista dirigida a un responsable de un
+comercio gastronómico. Esta entrevista se usó para conocer cómo identifican y gestionan los
+excedentes, qué canales utilizan para comunicarlos y qué dificultades encuentran durante el
+proceso. La estructura de la entrevista dirigida a los comercios se presenta en el Anexo 1.
+                                                                                               16
+
+
+Planificación del proyecto
+
+         Para organizar el desarrollo del proyecto se elaboró un diagrama de Gantt en el que se
+representan las actividades, su duración y la relación de precedencia entre ellas.
+
+
+
+
+Ilustración 1 - Diagrama de Gantt
+
+
+                                         Relevamiento
+
+         El relevamiento se realizó en una panadería y rotisería que se tomó como caso de
+referencia. La información se obtuvo mediante una entrevista a su dueño. La guía utilizada se
+encuentra en el Anexo 1.
+
+Relevamiento Estructural
+
+         El comercio estaba ubicado en el barrio Las Palmas. Contaba con espacios para elaborar y
+conservar alimentos, un mostrador para exhibir los productos y atender al público, y una caja.
+También disponía de una computadora y conexión a internet.
+
+Relevamiento funcional
+
+         En el comercio tomado como referencia, intervienen el dueño, el encargado del turno, el
+personal de cocina/producción y la persona que atiende la caja. Aunque las tareas se encuentran
+                                                                                               17
+
+
+diferenciadas según el puesto, es común que una misma persona pueda realizar varias de esas
+tareas al mismo tiempo:
+
+
+       El dueño o encargado controla la producción, revisa los productos disponibles, y decide
+cuáles pueden continuar ofreciéndose a la venta. Establece el precio y autoriza los descuentos
+aplicados antes del cierre.
+       El personal de producción o cocina informa las cantidades disponibles y controla cuál es
+el estado de los alimentos.
+       La persona encargada de la caja atiende las consultas por distintos medios, personales o
+virtuales, publica las promociones, registra las reservas y entrega los pedidos.
+
+
+       A partir del relevamiento se identificaron los siguientes procesos:
+
+
+       Nombre del proceso: Control de productos disponibles
+       Rol/es: Personal de producción; dueño o encargado del turno.
+       Pasos:
+           1. Al acercarse el cierre de la jornada, el personal de producción informa qué
+                productos han quedado sin vender y en qué cantidades.
+           2. Cerca de las 20:30, el dueño o encargado revisa los productos y decide cuáles
+                pueden seguir ofreciéndose.
+           3. Se definen los productos, combos o porciones que se pondrán a la venta y su precio.
+                Según lo informado en la entrevista, los descuentos habituales eran de entre el
+                20 % y el 30 %.
+           4. Los productos disponibles se anotan en el cuaderno de control del comercio.
+
+
+       Nombre del proceso: Comunicación de las promociones
+       Rol/es: Dueño o encargado; persona a cargo de la caja.
+       Pasos:
+           1. El dueño o encargado autoriza los productos y precios de la promoción.
+                                                                                                     18
+
+
+               2. La persona a cargo de la caja publica las ofertas principalmente en los estados de
+                  WhatsApp. El comercio también usa Instagram y comunica las promociones a
+                  quienes consultan en el mostrador.
+               3. Se responden las consultas sobre los productos disponibles.
+
+
+        Nombre del proceso: Gestión de reservas
+        Rol/es: Consumidor; persona a cargo de la caja.
+        Pasos:
+               1. El consumidor consulta o solicita una reserva por WhatsApp.
+               2. La persona a cargo de la caja comprueba la disponibilidad del producto y confirma
+                  la reserva.
+               3. La reserva se anota en el cuaderno con el nombre del cliente, el combo elegido, su
+                  precio y la indicación de si ya ha sido pagado.
+               4. Las cantidades disponibles y reservadas se controlan manualmente.
+
+
+        Nombre del proceso: Retiro del pedido
+        Rol/es: Consumidor; persona a cargo de la caja; dueño o encargado cuando una reserva no
+se retiraba.
+        Pasos:
+               1. El consumidor se presenta en el local e informa la reserva realizada.
+               2. La persona a cargo de la caja verifica el pedido, realiza el cobro cuando corresponde
+                  y entrega los productos.
+               3. Si la reserva no se retira dentro del horario previsto, el dueño o encargado decide
+                  si el producto todavía puede ofrecerse durante esa jornada o debe descartarse.
+
+
+        Nombre del proceso: Destino de los productos no vendidos
+        Rol/es: Dueño o encargado; personal de producción.
+        Pasos:
+               1. Al finalizar la venta, se identifican los productos que han quedado sin vender.
+               2. Algunos productos de panadería se reutilizan para elaborar pan rallado o tostadas.
+                                                                                                19
+
+
+           3. En el caso de las comidas de rotisería, algunas se ofrecen al personal y otras se
+               descartan.
+
+Relevamiento de documentación
+
+       El comercio utiliza una planilla de control interno en un cuaderno para registrar los
+productos que se encuentran disponibles al finalizar la jornada. Estos productos se separan de los
+productos frescos y se arman combos (Anexo 2).
+       Las conversaciones con los clientes a través de WhatsApp también funcionan como un
+registro informal de todas las consultas y reservas (Anexo 3).
+       Cuando se realiza una reserva, esta se registra en el cuaderno indicando el combo elegido,
+su precio, el nombre del cliente y si el producto ya fue pagado.
+                                                                                               20
+
+
+
+                                             Proceso de negocios
+       A continuación, se presenta el flujograma del proceso de negocio identificado a partir del
+relevamiento realizado:
+
+
+
+
+       Ilustración 2 - Proceso de Negocios
+                                                                                                                     21
+
+
+
+                                             Diagnóstico y Propuesta
+         A partir del relevamiento realizado se analizaron los procesos relacionados con la gestión
+de los excedentes alimentarios.
+
+
+ Nombre del proceso: Identificación de productos disponibles
+ Problemas                                                        Causas
+           -    La cantidad disponible de cada                               -   La revisión de los productos se
+                producto no siempre se conoce con                                realiza principalmente al finalizar
+                precisión durante la jornada.                                    la jornada.
+
+
+           -    Para      conocer        los        productos                -   Las cantidades se anotan de forma
+                disponibles es necesario consultar                               básica en una planilla o cuaderno
+                al personal de producción o revisar                              que no se actualiza en tiempo real,
+                las anotaciones realizadas.                                      por lo que la información puede
+                                                                                 quedar         incompleta         o
+                                                                                 desactualizada.
+Tabla 2 - Diagnóstico del proceso. Identificación de productos disponibles
+Fuente: Elaboración propia
+
+
+ Nombre del proceso: Control de excedente
+ Problemas                                                        Causas
+           -    La información obtenida durante el                           -   Los productos y las cantidades se
+                control de los excedentes no queda                               anotan en una planilla o cuaderno,
+                unida con los datos de las consultas                             mientras que las consultas y
+                y reservas.                                                      reservas se reciben por WhatsApp.
+                                                                             -   La   información     se   encuentra
+                                                                                 distribuida entre diferentes medios.
+           -    El     registro     de      los     productos                -   El control se realiza visualmente y
+                depende        de     que      el    personal                    la información se registra de
+                complete        las      anotaciones        al                   manera manual.
+                finalizar la jornada.
+                                                                                                                      22
+
+
+                                                                           -   La planilla o el cuaderno no se
+                                                                               actualiza en tiempo real.
+
+
+Tabla 3 - Diagnóstico del proceso. Control del excedente.
+Fuente: Elaboración propia
+
+
+ Nombre del proceso: Comunicación de las promociones
+ Problemas                                                        Causas
+           -    Las promociones pueden mostrar                             -   Las      publicaciones           deben
+                cantidades         que       ya       fueron                   actualizarse manualmente cuando
+                modificadas por una venta o una                                cambian las cantidades o se agotan
+                reserva.                                                       los productos.
+                                                                           -   Los estados de WhatsApp se
+                                                                               administran      por    separado     del
+                                                                               registro interno del comercio
+           -    Para actualizar o reservar una                             -   El control de las cantidades se
+                promoción,         el    personal        debe                  realiza manualmente.
+                comprobar primero la cantidad que                          -   La información sobre las reservas y
+                continúa disponible.                                           los   productos        disponibles   se
+                                                                               encuentra distribuida entre los
+                                                                               mensajes, las publicaciones y las
+                                                                               anotaciones internas.
+Tabla 4 - Diagnóstico del proceso. Comunicación de las promociones.
+Fuente: Elaboración propia
+
+
+ Nombre del proceso: Gestión de consultas y reservas
+ Problemas                                                        Causas
+           -    Para conocer la disponibilidad de                          -   Las consultas y reservas se reciben
+                un producto, el personal debe                                  principalmente por WhatsApp.
+                revisar      los     mensajes        y      las            -   El control de las reservas y de las
+                anotaciones realizadas.                                        cantidades disponibles se realiza de
+                                                                               manera manual.
+                                                                                                                          23
+
+
+           -    La información de las reservas se                          -   Las conversaciones de WhatsApp
+                encuentra distribuida en diferentes                            funcionan      como          un     registro
+                medios.                                                        informal     de    las       consultas    y
+                                                                               reservas.
+                                                                           -   Los productos y las cantidades
+                                                                               disponibles se registran de forma
+                                                                               separada      en   una        planilla    o
+                                                                               cuaderno.
+           -    Los cambios en la disponibilidad                           -   Las    reservas         no        actualizan
+                requieren que el personal actualice                            directamente       la         información
+                las promociones publicadas.                                    publicada en WhatsApp.
+                                                                           -   Cada       modificación           debe   ser
+                                                                               controlada         y          comunicada
+                                                                               manualmente por el personal.
+Tabla 5 - Diagnóstico del proceso. Gestión de consultas y reservas.
+Fuente: Elaboración propia
+
+
+ Nombre del proceso: Retiro del pedido
+ Problemas                                                        Causas
+           -    Para conocer el estado de un pedido                        -   Las conversaciones de WhatsApp
+                es necesario revisar los mensajes y                            funcionan      como          un     registro
+                comprobar si el cliente ya retiró el                           informal de las reservas, además
+                producto.                                                      del cuaderno o planilla interna.
+                                                                           -   La verificación y la entrega de los
+                                                                               pedidos se realizan manualmente
+                                                                               en el comercio.
+           -    Cuando una reserva no se retira, la                        -   El comercio debe decidir si el
+                disponibilidad del producto debe                               producto todavía puede ofrecerse
+                volver a ser evaluada por el                                   durante el tiempo restante de la
+                personal.                                                      jornada.
+                                                                                                   24
+
+
+                                                           -   La información sobre el retiro y las
+                                                               cantidades    disponibles    no   se
+                                                               actualiza en un único registro.
+Tabla 6 - Diagnóstico del proceso. Retiro del pedido.
+Fuente: Elaboración propia
+
+Propuesta
+
+         La propuesta consistió en desarrollar una aplicación web para gestionar de forma trazable
+los excedentes alimentarios de comercios gastronómicos, desde la publicación de los lotes hasta el
+retiro, la cancelación o el vencimiento de las reservas.
+         Para los comercios, se definieron funciones orientadas a registrar los productos disponibles
+e indicar su contenido, cantidad, precio, descuento y horario de retiro. También se contemplaron
+la modificación y el cierre de publicaciones, la consulta de las reservas recibidas y la confirmación
+de las entregas mediante un código de retiro.
+         Para los consumidores, se incluyeron la búsqueda y consulta de lotes disponibles, la reserva
+de unidades y la consulta y cancelación de sus reservas. Se contempló la presentación de mensajes
+dentro de la aplicación para informar la confirmación, cancelación o vencimiento de una reserva.
+         El control de disponibilidad contempló la actualización de las cantidades ante las reservas
+y cancelaciones. También se definió que los lotes dejaran de ofrecerse automáticamente al finalizar
+su horario de retiro. Se contempló la consulta de los lotes publicados y sus reservas asociadas,
+junto con el historial de cambios de estado de cada reserva, para conocer el resultado de las
+operaciones realizadas.
+         Para conocer el resultado de las publicaciones, se definieron indicadores sobre las
+cantidades publicadas, reservadas y retiradas, las reservas canceladas y vencidas y el monto
+asociado a los productos con retiro confirmado. Este último indicador representó el valor de los
+productos retirados, mientras que el cobro se resolvió directamente entre el comercio y el
+consumidor, fuera de la aplicación.
+         La comprobación del estado de los alimentos y su conservación hasta la entrega quedaron
+a cargo de cada comercio, incluida la cadena de frío cuando correspondiera. Al publicar un lote,
+se contempló que el comercio informara las condiciones de conservación y el horario límite de
+retiro, y que retirara la publicación si no podía garantizar esas condiciones. La verificación física
+del estado de los alimentos quedó fuera del alcance del sistema.
+                                                                                                    25
+
+
+          Con estas funciones se buscó ordenar la gestión de los excedentes, facilitar la coordinación
+de las reservas y los retiros y disponer de información sobre el resultado de las operaciones.
+
+
+                         Objetivos, Límites y Alcance del Prototipo
+Objetivo del prototipo
+
+          Desarrollar una aplicación web que permita a los comercios gastronómicos publicar y
+administrar lotes de excedentes alimentarios aptos para el consumo, y a los consumidores buscar,
+reservar y retirar esos lotes mediante una reserva digital, con el fin de mejorar el control de la
+disponibilidad, reducir tareas manuales y el descarte de productos no vendidos.
+
+Límites
+
+          Desde la publicación de un lote de excedentes alimentarios hasta el cierre o vencimiento
+de la publicación y la resolución de sus reservas como retiradas, canceladas o expiradas,
+conservando el historial de las operaciones realizadas.
+
+Alcance
+
+             -   Registro e inicio de sesión de usuarios.
+             -   Control de la disponibilidad de los lotes.
+             -   Registro del estado de las reservas.
+             -   Gestión de los datos del comercio.
+             -   Publicación, modificación y cierre de lotes.
+             -   Consulta de las reservas recibidas.
+             -   Confirmación del retiro de los pedidos.
+             -   Consulta del historial de lotes y reservas.
+             -   Búsqueda y consulta de lotes disponibles.
+             -   Reserva de productos.
+             -   Consulta y cancelación de reservas.
+             -   Consulta del código y del estado del retiro.
+             -   Vencimiento automático de los lotes al finalizar su horario de retiro.
+             -   Consulta de indicadores sobre las cantidades publicadas, reservadas y retiradas, las
+                 reservas canceladas y vencidas y el monto asociado a los productos retirados.
+                                                                                             26
+
+
+
+                                     Descripción del sistema
+Product Backlog
+
+         Se presenta el Product Backlog donde se encuentran todas las tareas a realizar para el
+desarrollo del prototipo
+
+
+ ID            Historia de Usuario                   Prioridad   Puntos   Dependencias
+ HU-001        Registro de usuario                   Alta        3        -
+ HU-002        Inicio de sesión                      Alta        2        HU-001
+ HU-003        Registro del comercio                 Alta        5        HU-002
+               Actualización del perfil del
+ HU-004                                              Media       3        HU-003
+               comercio
+ HU-005        Publicación de un lote                Alta        8        HU-003, HU-004
+ HU-006        Edición y cierre de un lote           Media       5        HU-005
+ HU-007        Actualización de disponibilidad       Alta        5        HU-005
+ HU-008        Búsqueda de lotes                     Alta        8        HU-005, HU-007
+ HU-009        Consulta del detalle de un lote       Alta        3        HU-008
+ HU-010        Reserva de un lote                    Alta        8        HU-002, HU-007, HU-009
+               Consulta de la reserva y del código
+ HU-011                                              Alta        3        HU-010
+               de retiro
+ HU-012        Cancelación de una reserva            Media       3        HU-010, HU-011
+ HU-013        Gestión de reservas del comercio      Alta        5        HU-003, HU-010
+ HU-014        Confirmación del retiro               Alta        5        HU-011, HU-013
+ HU-015        Expiración de una reserva             Alta        5        HU-007, HU-010
+                                                                          HU-005, HU-010, HU-014,
+ HU-016 Consulta de historial e indicadores Media                8
+                                                                          HU-015
+Tabla 7 - Product Backlog
+Fuente: Elaboración propia
+                                                                                                      27
+
+
+Historias de Usuario
+
+         A continuación, se detallan las historias incluidas en el Product Backlog.
+
+
+ ID                       HU-001                               Nombre               Registro de usuario
+                          Como usuario quiero registrarme como consumidor o responsable de un comercio
+ Descripción
+                          para utilizar las funciones correspondientes a mi perfil.
+                          1. Dado un correo electrónico que no está registrado y los datos obligatorios son
+                          válidos, cuando el usuario confirma y envía el formulario, entonces el sistema crea
+                          la cuenta con el rol seleccionado.
+                          2. Dado un correo electrónico que ya se encuentra registrado, cuando el usuario
+ Criterios          de
+                          intenta crear una cuenta, entonces el sistema informa el error y no genera un
+ aceptación
+                          registro duplicado.
+
+                          3. Dado que falta un dato obligatorio o hay un dato incompleto, cuando el usuario
+                          intenta continuar, entonces el sistema identifica los campos que deben
+                          completarse.
+                                                              Puntos de historia
+ Prioridad                Alta                                                   3
+                                                              estimados:
+Tabla 8 - HU-001 Registro de usuario
+Fuente: Elaboración propia
+
+
+ ID                         HU-002          Nombre                   Inicio de sesión
+                            Como usuario registrado quiero iniciar sesión para acceder a las funciones
+ Descripción
+                            habilitadas para mi rol.
+
+                        1. Dado un usuario activo con credenciales válidas, cuando inicia sesión,
+                        entonces el sistema muestra la pantalla inicial correspondiente a su rol.
+ Criterios           de 2. Dadas credenciales incorrectas, cuando el usuario intenta ingresar, entonces el
+ aceptación             sistema     rechaza    el    acceso     y     muestra      un   mensaje     claro.
+                        3. Dado un usuario sin una sesión válida, cuando intenta abrir una función
+                        protegida, entonces el sistema solicita que inicie sesión.
+
+                                            Puntos de historia
+ Prioridad                  Alta                               2          Dependencias            HU-001
+                                            estimados:
+Tabla 9 - HU-002 Inicio de sesión
+Fuente: Elaboración propia
+                                                                                                     28
+
+
+ ID                        HU-003           Nombre                  Registro del comercio
+
+                           Como responsable de un comercio quiero registrar los datos del establecimiento
+ Descripción
+                           para identificarlo y permitir que los consumidores encuentren sus publicaciones.
+
+
+
+
+                        1. Dado un responsable de comercio que ya se encuentra con una sesión iniciada,
+                        cuando completa el nombre, el teléfono y la dirección del comercio, entonces el
+                        sistema     guarda      el   establecimiento     asociado     a     su    cuenta.
+                        2. Dada una dirección válida, cuando se registra el comercio, entonces el sistema
+                        obtiene sus coordenadas para utilizarlas en las búsquedas por cercanía.
+ Criterios           de
+                        3. Dada una dirección que no puede ubicarse, cuando se intenta guardar, entonces
+ aceptación
+                        el    sistema     solicita  que     sea    revisada    antes     de    continuar.
+                        4. Dado un campo incompleto cuando el usuario intenta registrar el comercio,
+                        entonces, el sistema dará aviso de que todos los campos son requeridos.
+                        5. Dado un campo que no cumple con las condiciones de validaciones, el sistema
+                        dará aviso de las validaciones que no están siendo cumplidas.
+
+
+
+                                            Puntos de historia
+ Prioridad                 Alta                                5         Dependencias            HU-002
+                                            estimados:
+Tabla 10 - HU-003 Registro del comercio
+Fuente: Elaboración propia
+                                                                                                         29
+
+
+
+
+ ID                         HU-004                Nombre              Actualización del perfil del comercio
+
+                            Como responsable de un comercio quiero actualizar los datos del establecimiento
+ Descripción
+                            y sus condiciones habituales de retiro para mantener la información actualizada.
+
+                        1. Dado un comercio registrado, cuando su responsable modifica el nombre,
+                        teléfono, descripción u horario habitual, entonces el sistema guarda los cambios.
+                        2. Dado un cambio de dirección, cuando se confirma la modificación, entonces
+                        el sistema actualiza las coordenadas utilizadas para calcular cercanía.
+                        3. Dado un usuario que no administra el comercio, cuando intenta editarlo,
+ Criterios           de
+                        entonces          el        sistema          deniega         la        operación.
+ aceptación
+                        4. Dado un campo incompleto cuando el usuario intenta guardar los cambios del
+                        comercio, entonces, el sistema dará aviso de que todos los campos son
+                        requeridos.
+                        5. Dado un campo que no cumple con las condiciones de validaciones, el sistema
+                        dará aviso de las validaciones que no están siendo cumplidas.
+                                           Puntos de historia
+ Prioridad              Media                                      3    Dependencias            HU-003
+                                           estimados:
+Tabla 11 - HU-004 Actualización del perfil del comercio
+Fuente: Elaboración propia
+
+
+ ID                         HU-005                Nombre              Publicación de un lote
+                            Como responsable de un comercio quiero publicar un lote de excedentes para
+ Descripción
+                            informar su contenido, foto principal, precio, cantidad y horario de retiro.
+
+
+                        1. Dado un comercio activo, cuando su responsable completa el contenido del
+                        lote, la cantidad, el precio y la franja de retiro, entonces el sistema publica el lote.
+                        2. Dada una cantidad menor que uno o un horario de finalización anterior al
+                        inicio, cuando se intenta publicar, entonces el sistema no guarda el lote e informa
+ Criterios           de los                                  campos                                  inválidos.
+ aceptación             3. Dado que falta el contenido, la cantidad, el precio o alguno de los horarios de
+                        retiro requeridos para publicar, cuando el comercio intenta guardar el lote,
+                        entonces el sistema identifica los datos pendientes y no publica el lote.
+                        4. Dado un campo que no cumple con las condiciones de validaciones, el sistema
+                        dará aviso de las validaciones que no están siendo cumplidas.
+
+
+                                                  Puntos de historia                                 HU-003,
+ Prioridad                  Alta                                     8      Dependencias
+                                                  estimados:                                         HU-004
+Tabla 12 - HU-005 Publicación de un lote.
+Fuente: Elaboración propia
+                                                                                                      30
+
+
+
+
+ ID                         HU-006                  Nombre            Edición y cierre de un lote
+
+                            Como responsable de un comercio quiero modificar o cerrar un lote para corregir
+ Descripción
+                            la publicación o impedir nuevas reservas cuando deje de estar disponible.
+
+                        1. Dado un lote publicado, cuando su responsable modifica los datos permitidos,
+                        entonces el sistema actualiza la publicación. Si existen reservas activas, no
+                        permite modificar los productos incluidos ni la franja de retiro. Los cambios de
+                        precio se aplican únicamente a las nuevas reservas, conservando los importes de
+                        las ya confirmadas.
+                        2. Dado un lote publicado, cuando su responsable modifica la cantidad total de
+                        unidades, entonces el sistema impide establecer un valor inferior a la suma de las
+                        unidades correspondientes a reservas activas y reservas retiradas. Si la
+ Criterios           de modificación es válida, recalcula la cantidad disponible sin alterar las reservas
+ aceptación             existentes.
+                        3. Dado un lote publicado, cuando su responsable lo cierra, entonces el sistema
+                        deja de ofrecerlo para nuevas reservas y conserva las reservas existentes.
+                        4. Dado un lote cuyo horario límite de retiro finalizó, cuando el sistema controla
+                        su vigencia, entonces cambia su estado a expirado y deja de admitir nuevas
+                        reservas.
+                        5. Dado un lote con reservas activas, cuando el comercio modifica el precio de
+                        la publicación, entonces las reservas existentes conservan el importe registrado
+                        al confirmarlas y el nuevo precio se aplica únicamente a reservas posteriores.
+                                          Puntos de historia
+ Prioridad              Media                                     5     Dependencias             HU-005
+                                          estimados:
+Tabla 13- HU-006 Edición y cierre de un lote
+Fuente: Elaboración propia
+
+
+ ID                         HU-007           Nombre                 Actualización de disponibilidad
+                            Como responsable de un comercio quiero que la cantidad disponible se actualice
+ Descripción                con cada operación para evitar que una misma unidad sea reservada más de una
+                            vez.
+                        1. Dado un lote con unidades disponibles, cuando se confirma una reserva,
+                        entonces el sistema descuenta la cantidad reservada en una única operación.
+ Criterios           de 2. Dado un lote cuya disponibilidad llega a cero, cuando se completa la reserva,
+ aceptación             entonces el sistema lo marca como agotado y deja de admitir nuevas reservas.
+                        3. Dada una reserva cancelada mientras el lote continúa vigente, cuando cambia
+                        su estado, entonces el sistema actualiza las unidades correspondientes
+                                                    Puntos de historia
+ Prioridad                  Alta                                       5   Dependencias             HU-005
+                                                    estimados:
+Tabla 14 - HU-007 Actualización de disponibilidad
+Fuente: Elaboración propia
+                                                                                                         31
+
+
+
+
+ ID                         HU-008                  Nombre             Búsqueda de lotes
+                            Como consumidor quiero buscar lotes disponibles y aplicar filtros para encontrar
+ Descripción
+                            opciones adecuadas antes de dirigirme al comercio.
+
+
+                         1. Dada una ubicación informada por el consumidor, cuando realiza una
+                         búsqueda, entonces el sistema muestra únicamente lotes publicados, vigentes y
+                         con                                                               disponibilidad.
+ Criterios            de
+                         2. Dados filtros de distancia, categoría o precio, cuando se aplican, entonces el
+ aceptación
+                         sistema actualiza los resultados de acuerdo con esos valores.
+                         3. Dada una búsqueda sin resultados, cuando finaliza la consulta, entonces el
+                         sistema informa que no existen ofertas coincidentes.
+
+                                                    Puntos de historia                              HU-005,
+ Prioridad                  Alta                                       8    Dependencias
+                                                    estimados:                                      HU-007
+Tabla 15 - HU-008 Búsqueda de lotes
+Fuente: Elaboración propia
+
+
+ ID                         HU-009                  Nombre             Consulta del detalle de un lote
+                            Como consumidor quiero consultar el detalle de un lote para conocer qué incluye,
+ Descripción
+                            cuánto cuesta y cuándo puede retirarse.
+
+
+                         1. Dado un lote vigente, cuando el consumidor abre su detalle, entonces el
+                         sistema muestra contenido, precio, foto principal, cantidad disponible, comercio,
+ Criterios            de dirección y horario de retiro.
+ aceptación              2. Dado un lote agotado o cerrado mientras el consumidor visualiza la
+                         información, cuando intenta reservar, entonces el sistema actualiza el estado e
+                         impide continuar.
+
+
+                                                    Puntos de historia
+ Prioridad                  Alta                                       3    Dependencias            HU-008
+                                                    estimados:
+Tabla 16 - HU-009 Consulta del detalle de un lote
+Fuente: Elaboración propia
+                                                                                                      32
+
+
+
+
+ ID                         HU-010                 Nombre             Reserva de un lote
+                            Como consumidor quiero reservar unidades de un lote para asegurar su
+ Descripción
+                            disponibilidad hasta el horario acordado de retiro.
+                         1. Dado un lote vigente con cantidad disponible, cuando el consumidor confirma
+                         la reserva, entonces el sistema la registra, descuenta las unidades y genera un
+                         código                                  de                                 retiro.
+                         2. Dado que la cantidad solicitada supera la disponibilidad, cuando se intenta
+                         reservar, entonces el sistema informa la cantidad actual y no crea la reserva.
+ Criterios            de 3. Dado que el lote venció antes de confirmar la operación, cuando el consumidor
+ aceptación              intenta reservar, entonces el sistema rechaza la solicitud y actualiza el estado
+                         mostrado.
+                         4. Dado un lote vigente, cuando el consumidor confirma una reserva, entonces el
+                         sistema le asigna la franja de retiro definida por el comercio y establece su
+                         vencimiento al finalizar dicha franja. El consumidor puede consultar estos
+                         horarios antes de confirmar la operación y en el detalle de su reserva.
+                                                                                                  HU-002,
+                                                   Puntos de historia
+ Prioridad                  Alta                                      8    Dependencias           HU-007,
+                                                   estimados:
+                                                                                                  HU-009
+Tabla 17 - HU-010 Reserva de un lote
+Fuente: Elaboración propia
+
+
+
+
+ ID                         HU-011                 Nombre             Consulta de la reserva y del código de
+                                                                      retiro
+                            Como consumidor quiero consultar el detalle de mis reservas y su código de
+ Descripción
+                            retiro para conocer su estado y presentar el código al retirar el pedido.
+                         1. Dada una reserva del consumidor autenticado, cuando consulta su detalle,
+                         entonces el sistema muestra el lote, el comercio, la cantidad reservada, el
+                         importe, el horario límite de retiro y el estado de la reserva.
+                         2. Dada una reserva activa del consumidor autenticado, cuando consulta su
+ Criterios            de
+                         detalle, entonces el sistema muestra el código que debe presentar para retirar el
+ aceptación
+                         pedido.
+                         3. Dado un consumidor que intenta consultar una reserva ajena, cuando realiza
+                         la solicitud, entonces el sistema rechaza el acceso sin revelar los datos de esa
+                         reserva.
+                                            Puntos de historia
+ Prioridad               Alta                                        3    Dependencias          HU-010
+                                            estimados:
+Tabla 18 - HU-011 Consulta de la reserva y del código de retiro
+Fuente: Elaboración propia
+                                                                                                    33
+
+
+
+
+ ID                        HU-012                Nombre             Cancelación de una reserva
+
+                           Como consumidor quiero cancelar una reserva que no podré retirar para liberar
+ Descripción
+                           las unidades y mantener actualizada la disponibilidad.
+
+                        1. Dada una reserva activa, cuando el consumidor confirma la cancelación antes
+                        de su expiración, entonces el sistema cambia el estado y libera las unidades.
+ Criterios           de 2. Dada una reserva retirada o expirada, cuando el consumidor intenta cancelarla,
+ aceptación             entonces el sistema informa que la operación ya no está disponible.
+                        3. Dado un lote cerrado o expirado, cuando se cancela una reserva, entonces el
+                        sistema registra la cancelación sin volver a ofrecer esas unidades.
+                                                 Puntos de historia                              HU-010,
+ Prioridad                 Media                                    3    Dependencias
+                                                 estimados:                                      HU-011
+Tabla 19 - HU-012 Cancelación de una reserva
+
+
+
+ ID                        HU-013                Nombre             Gestión de reservas del comercio
+
+                           Como responsable de un comercio quiero consultar las reservas recibidas para
+ Descripción
+                           preparar los pedidos y controlar su estado.
+
+
+                        1. Dado un comercio, cuando su responsable ingresa a las reservas, entonces el
+                        sistema muestra las operaciones correspondientes a sus propios lotes.
+ Criterios           de 2. Dados filtros por lote, fecha o estado, cuando se aplican, entonces el sistema
+ aceptación             presenta        únicamente         las       reservas       que        coinciden.
+                        3. Dada una reserva activa, cuando se consulta su detalle, entonces el sistema
+                        muestra la cantidad, el importe y el límite de retiro.
+
+
+                                                 Puntos de historia                              HU-003,
+ Prioridad                 Alta                                     5    Dependencias
+                                                 estimados:                                      HU-010
+Tabla 20 - HU-013 Gestión de reservas del comercio
+Fuente: Elaboración propia
+                                                                                                    34
+
+
+  ID                         HU-014          Nombre                 Confirmación del retiro
+
+                             Como responsable de un comercio quiero validar el código de una reserva para
+  Descripción
+                             confirmar la entrega del pedido y cerrar la operación.
+
+
+                         1. Dada una reserva activa y un código válido, cuando el comercio confirma la
+  Criterios           de entrega, entonces el sistema registra la fecha y cambia el estado a retirada.
+  aceptación             2. Dado un código inexistente, cancelado, ya utilizado o expirado, cuando se
+                         intenta validar, entonces el sistema rechaza la confirmación e informa el motivo.
+
+                                             Puntos de historia                                 HU-011,
+  Prioridad                  Alta                               5        Dependencias
+                                             estimados:                                         HU-013
+Tabla 21 - HU-014 Confirmación del retiro
+Fuente: Elaboración propia
+
+
+  ID                         HU-015          Nombre                 Expiración de una reserva
+
+                             Como responsable de un comercio quiero que las reservas no retiradas expiren
+  Descripción
+                             automáticamente para conocer su resultado.
+
+                         1. Dada una reserva activa, cuando finaliza la franja de retiro asignada al
+                         confirmarla, entonces el sistema cambia su estado a expirada e impide confirmar
+  Criterios           de la entrega.
+  aceptación             2. Cuando una reserva expira, el sistema conserva el registro de la operación y
+                         su cambio de estado, sin volver a ofrecer las unidades, dado que su período de
+                         retiro ya finalizó.
+                                             Puntos de historia                                 HU-007,
+  Prioridad                  Alta                               5        Dependencias
+                                             estimados:                                         HU-010
+Tabla 22- HU-015 Expiración de una reserva
+Fuente: Elaboración propia
+                                                                                                       35
+
+
+ ID                         HU-016                 Nombre             Consulta de historial e indicadores
+                            Como responsable de un comercio quiero consultar el historial de lotes y reservas
+ Descripción
+                            para conocer el resultado de los excedentes publicados.
+                         1. Dado un período seleccionado, cuando el responsable consulta el historial,
+                         entonces el sistema muestra sus lotes publicados y las reservas asociadas.
+                         2. Dados los datos del período seleccionado, cuando el responsable consulta el
+                         resumen, entonces el sistema informa la cantidad de unidades publicadas,
+                         reservadas y retiradas, y las unidades correspondientes a las reservas canceladas
+                         y expiradas.
+ Criterios            de
+                         3. Dada una reserva correspondiente a un lote de su comercio, cuando el
+ aceptación
+                         responsable consulta su historial, entonces el sistema muestra los cambios de
+                         estado registrados, con su fecha y hora. Para cada lote, se permite consultar su
+                         estado actual y las reservas asociadas.
+                         4. Dado un período seleccionado, cuando el responsable consulta el indicador
+                         monetario, entonces el sistema muestra la suma de los importes de las reservas
+                         con retiro confirmado durante ese período.
+                                                                                                   HU-005,
+                                                   Puntos de historia                              HU-010,
+ Prioridad                  Media                                     8    Dependencias
+                                                   estimados:                                      HU-014,
+                                                                                                   HU-015
+Tabla 23 - HU-016 Consulta de historial e indicadores
+Fuente: Elaboración propia
+                                                                                        36
+
+
+Sprint Backlog
+
+        Historias
+ Sprint de          ID   Tarea                          Prioridad Estimación   Estado
+        Usuario
+                         Crear la estructura inicial de
+                    1    la aplicación, la API y la base Alta     0,5 día      Hecho
+                         de datos.
+                         Crear las tablas de usuarios y
+                    2                                   Alta      0,5 día      Hecho
+                         comercios.
+         HU-001          Configurar la autenticación
+                    3                                Alta         0,5 día      Hecho
+                         de usuarios.
+                         Desarrollar el formulario de
+                    4                                 Alta        0,5 día      Hecho
+                         registro de usuarios.
+                         Implementar las validaciones
+                    5                                 Alta        0,5 día      Hecho
+                         del registro.
+                         Desarrollar el inicio y cierre
+                    6                                   Alta      0,5 día      Hecho
+                         de sesión.
+         HU-002
+   1                     Configurar el acceso según el
+                    7                                  Alta       0,5 día      Hecho
+                         tipo de usuario.
+                         Desarrollar el formulario de
+                    8                                 Alta        0,5 día      Hecho
+                         registro del comercio.
+         HU-003
+                         Registrar la dirección y la
+                    9                                Alta         0,5 día      Hecho
+                         ubicación del comercio.
+                         Desarrollar la actualización
+         HU-004     10   de los datos y horarios del Media        0,5 día      Hecho
+                         comercio.
+                         Realizar pruebas de registro,
+                    11   acceso y gestión del Alta                1 día        Hecho
+         HU-001 a        comercio.
+         HU-004
+                         Corregir errores e integrar las
+                    12                                   Alta     1 día        Hecho
+                         funciones desarrolladas.
+                         Crear las tablas de productos,
+                    1    lotes y productos incluidos Alta         1 día        Hecho
+   2     HU-005          en cada lote.
+                         Desarrollar el registro de
+                    2                               Media         0,5 día      Hecho
+                         productos del comercio.
+                                                                                        37
+
+
+
+       Historias
+Sprint de          ID   Tarea                           Prioridad Estimación   Estado
+       Usuario
+                        Desarrollar la función para
+                   3                                Alta          1 día        Hecho
+                        crear un lote.
+       HU-005
+                        Crear el formulario        de
+                   4                                    Alta      1 día        Hecho
+                        publicación de lotes.
+                        Implementar la modificación
+       HU-006      5                                Media         0,5 día      Hecho
+                        y el cierre de un lote.
+
+                        Implementar la actualización
+       HU-007      6                                   Alta       0,5 día      Hecho
+                        de las cantidades disponibles.
+
+                        Desarrollar el listado de lotes
+                   7                                    Alta      0,5 día      Hecho
+                        publicados y vigentes.
+
+  2                     Incorporar      filtros    por
+                   8    categoría, precio y horario de Media      0,5 día      Hecho
+       HU-008           retiro.
+
+                        Incorporar la búsqueda según
+                   9                                 Alta         1 día        Hecho
+                        la ubicación del consumidor.
+
+                        Desarrollar la consulta del
+       HU-009      10                               Alta          0,5 día      Hecho
+                        detalle de cada lote.
+                        Realizar    pruebas      de
+       HU-005 a
+                   11   publicación y actualización Alta          0,5 día      Hecho
+       HU-007
+                        de lotes.
+       HU-008 y         Realizar      pruebas      de
+                   12                                 Alta        0,5 día      Hecho
+       HU-009           búsqueda, filtros y consulta.
+                        Crear las tablas y los estados
+                   1    necesarios para registrar las Alta        1 día        Hecho
+                        reservas.
+                        Desarrollar la función para
+                   2                                  Alta        1 día        Hecho
+  3    HU-010           reservar unidades de un lote.
+                        Crear el formulario de
+                   3                                Alta          0,5 día      Hecho
+                        confirmación de la reserva.
+                        Actualizar la disponibilidad
+                   4                                 Alta         0,5 día      Hecho
+                        después de cada reserva.
+                                                                                       38
+
+
+
+       Historias
+Sprint de          ID   Tarea                          Prioridad Estimación   Estado
+       Usuario
+                        Generar el código y mostrar
+       HU-011      5                                Alta         0,5 día      Hecho
+                        el detalle de la reserva.
+                        Desarrollar la cancelación y
+       HU-012      6    la devolución de unidades al Media       1 día        Hecho
+                        lote.
+                        Crear el listado de reservas
+       HU-013      7                                 Alta        0,5 día      Hecho
+                        recibidas por el comercio.
+
+                        Validar el código y confirmar
+       HU-014      8                                  Alta       1 día        Hecho
+                        el retiro del pedido.
+  3
+                        Implementar el vencimiento
+                   9                                   Alta      1 día        Hecho
+                        de las reservas no retiradas.
+       HU-015           Registrar el cierre de
+                   10   disponibilidad al finalizar la Alta      0,5 día      Hecho
+                        franja de retiro.
+                        Comprobar que no se
+       HU-010      11   reserven más unidades que Alta           0,5 día      Hecho
+                        las disponibles.
+       HU-010 a         Realizar pruebas del proceso
+                   12                                 Alta       0,5 día      Hecho
+       HU-015           completo de reserva y retiro.
+                        Preparar la consulta de lotes                         Hecho
+                   1                                  Media      0,5 día
+                        y reservas anteriores.
+                        Desarrollar el historial de                           Hecho
+                   2                                Media        0,5 día
+                        lotes del comercio.
+                        Desarrollar el historial de                           Hecho
+       HU-016      3                                Media        0,5 día
+                        reservas del consumidor.
+                        Calcular los indicadores de                           Hecho
+  4                4                                Media        1 día
+                        lotes y reservas.
+                        Crear la       consulta   de                          Hecho
+                   5                                   Media     0,5 día
+                        indicadores.
+                        Adaptar las pantallas para                            Hecho
+                   6                               Alta          0,5 día
+                        computadoras y celulares.
+       Todas
+                        Incorporar mensajes de                                Hecho
+                   7                                 Media       0,5 día
+                        confirmación, carga y error.
+                                                                                               39
+
+
+
+        Historias
+ Sprint de                   ID   Tarea                        Prioridad Estimación   Estado
+        Usuario
+                                  Revisar     los    permisos,                        Hecho
+                             8                                 Alta      1 día
+                                  accesos y validaciones.
+     4       Todas                Probar el proceso completo                          Hecho
+                             9    de publicación, reserva y Alta         1 día
+                                  retiro.
+Tabla 24 - Sprint Backlog
+Fuente: Elaboración propia
+                                                                                                  40
+
+
+Estructura de datos
+
+       A continuación, se presenta el diagrama de entidad-relación definido para almacenar los
+datos de la aplicación. Este diagrama permite representar las entidades, sus claves y los vínculos
+necesarios para controlar la disponibilidad de los lotes y mantener la trazabilidad de las reservas.
+Las operaciones requieren consistencia entre la cantidad publicada, las unidades reservadas y los
+cambios de estado.
+
+
+
+
+       Ilustración 3 - Diagrama Entidad-Relación
+                                                                                                  41
+
+
+Prototipo de interfaces de pantallas
+
+       A continuación, se presentan los prototipos de interfaz para el usuario comerciante. Las
+interfaces presentadas son prototipos ilustrativos de la organización y navegación de la aplicación.
+Los nombres, cantidades, importes y horarios corresponden a datos de ejemplo y pueden variar
+entre pantallas. Las reglas funcionales del sistema se establecen en las historias de usuario y sus
+criterios de aceptación.
+
+
+
+
+       Ilustración 4 - Inicio de sesión
+
+
+       Al ingresar por primera vez, se muestra un formulario para iniciar sesión junto a un enlace
+para que el comerciante pueda crearse una cuenta nueva, si no tiene.
+                                                                                                   42
+
+
+
+
+       Ilustración 5 - Creación de cuenta
+
+
+       Una vez creada la cuenta, se le presentará un formulario para completar los datos necesarios
+del comercio.
+
+
+
+
+       Ilustración 6 - Registrar comercio
+
+
+       Al iniciar sesión, el usuario visualizará una pantalla con un resumen general del día. Desde
+allí podrá consultar métricas rápidas del día y de la semana, crear y publicar un nuevo lote, revisar
+                                                                                              43
+
+
+las reservas pendientes de retiro, validar un código de retiro y visualizar los lotes de hoy
+disponibles.
+
+
+
+
+       Ilustración 7 - Dashboard de resumen del día
+
+
+       Desde la aplicación, el comerciante podrá visualizar todos los lotes creados junto con su
+estado actual. Desde esta sección podrá gestionarlos y, si lo desea, crear un nuevo lote.
+
+
+
+
+       Ilustración 8 - Lotes disponibles
+                                                                                               44
+
+
+       El comerciante podrá crear un nuevo lote completando sus datos y seleccionando uno o
+varios productos disponibles en su catálogo.
+
+
+
+
+       Ilustración 9 - Creación de un nuevo lote
+
+
+       La aplicación cuenta con un panel donde el comerciante podrá visualizar todas las reservas
+realizadas por los consumidores y acceder rápidamente a la opción para validar el retiro de cada
+una.
+
+
+
+
+       Ilustración 10 - Reservas recibidas
+                                                                                                  45
+
+
+       La herramienta cuenta con una sección para validar el retiro de una reserva. Al momento
+de retirar el pedido el consumidor le entrega el código al comerciante, quien lo ingresa y hace clic
+en la opción “Validar código”. Si el código es correcto, podrá confirmar la entrega, en caso
+contrario, la aplicación le informará que el código ingresado no es válido.
+
+
+
+
+       Ilustración 11 - Validar retiro
+
+
+
+
+       Ilustración 12 - Confirmar entrega
+                                                                                         46
+
+
+
+
+       Ilustración 13 - Datos de una reserva
+
+
+La aplicación cuenta con una sección de métricas y reportes para el comerciante, para poder
+analizar las estadísticas y todos los datos relacionados a su gestión de excedentes.
+
+
+
+
+       Ilustración 14 - Historial e indicadores
+                                                                                                47
+
+
+       A continuación, se presentan los prototipos de interfaz correspondientes a la experiencia
+del consumidor dentro de la aplicación.
+        El consumidor podrá iniciar sesión en la aplicación y acceder a la sección “Mi cuenta”,
+donde podrá consultar y gestionar la información asociada a su perfil.
+
+
+
+
+       Ilustración 15 - Inicio de sesión y creación de cuenta Consumidor
+
+
+
+       Desde la pantalla Explorar, el consumidor podrá visualizar los lotes disponibles por cada
+comercio cercano y realizar una reserva, confirmando la cantidad de productos, el monto total y el
+horario de retiro definido por el comercio. También podrá acceder rápidamente a sus reservas del
+día y consultar los detalles de una reserva confirmada para realizar el retiro en el horario
+correspondiente.
+                                                                                                 48
+
+
+
+
+       Ilustración 16 - Confirmar reserva
+
+
+Desde la sección “Reservas”, el consumidor podrá consultar sus reservas actuales y aquellas que
+ya finalizaron, ya sea porque fueron retiradas, canceladas o expiraron. Para las reservas que estén
+listas para retirar, podrá acceder al código de retiro correspondiente.
+
+
+
+
+       Ilustración 17 - Mis reservas
+                                                                                                 49
+
+
+Diagrama de Arquitectura
+
+       El siguiente diagrama representa la estructura y las interacciones de la aplicación web. La
+aplicación se organiza en tres partes: la interfaz web, el backend y la base de datos. Los usuarios
+acceden desde una computadora o desde un celular. La interfaz web está desarrollada con React y
+se comunica con el servidor, implementado con Node.js y Express, mediante solicitudes HTTPS
+que intercambian datos en formato JSON.
+       La API controla la publicación de lotes, la disponibilidad y las reservas antes de guardar
+los cambios en la base de datos, que es PostgreSQL. Las operaciones que descuentan o restituyen
+unidades se ejecutan de forma transaccional para evitar reservas por encima de la cantidad
+disponible. Supabase Auth administra las cuentas y las sesiones, mientras que la API valida el
+token y el rol antes de permitir cada operación.
+       El servicio de geocodificación convierte la dirección del comercio en coordenadas, que se
+almacenan junto con sus datos. La ubicación informada por el consumidor se utiliza como
+referencia para calcular distancias y ordenar o filtrar los lotes disponibles, sin requerir su
+almacenamiento permanente en la base de datos.
+                                            50
+
+
+
+
+Ilustración 1819
+  Ilustración  - Diagrama de arquitectura
+                                                                                                       51
+
+
+
+                                              Seguridad
+          En esta sección se describen los aspectos relacionados a la seguridad del sistema,
+detallando los mecanismos y medidas de protección que han sido considerados para resguardar la
+información y garantizar su integridad.
+
+Acceso a la aplicación
+
+          El ingreso se realiza mediante correo electrónico y contraseña con Supabase Auth. El
+correo debe ser único y confirmarse antes de habilitar el usuario. Se definió una contraseña de al
+menos doce caracteres que incluya mayúsculas, minúsculas, números y un símbolo.
+          Las contraseñas no se guardan en las tablas de negocio ni se registran en los mensajes de
+la API. Supabase Auth almacena sus valores mediante bcrypt y una sal aleatoria, por lo que no se
+necesita implementar un mecanismo propio de almacenamiento. Este procedimiento genera un
+resumen criptográfico y no un cifrado reversible. Se estableció el cambio de contraseña ante
+sospecha de compromiso o a solicitud del usuario, sin una renovación periódica de la misma.
+(Supabase, 2026c).
+          Para iniciar sesión, una vez que el usuario ingresó su usuario y contraseña y este es correcto,
+la aplicación recibe un token de acceso y lo envía a la API en cada solicitud protegida. El servidor
+verifica su firma, emisor, destinatario y fecha de vencimiento antes de procesar la operación. Se
+fijó una vigencia de una hora para el token de acceso; su renovación se delega en Supabase Auth.
+Para el escenario definido, la sesión se mantiene en memoria del navegador y se elimina al cerrar
+sesión.
+          Para determinar los permisos de acceso, el sistema identifica al usuario a partir de su sesión
+autenticada y consulta la información de su perfil en la base de datos. Los roles y permisos se
+gestionan desde el servidor, evitando que se pueda modificar mediante los datos del cliente.
+Durante el registro, el usuario puede seleccionar un perfil de consumidor o comercio, pero esta
+elección no implica el acceso a información o recursos de otros usuarios.
+                                                                                                         52
+
+
+Roles de usuario
+
+          La aplicación cuenta con 2 roles: Consumidor o Comercio
+ Operación                               Consumidor                   Comercio
+ Consultar publicaciones y su            Lotes publicados, vigentes y Publicaciones y lotes de su
+ detalle                                 disponibles.                 comercio.
+ Administrar         comercio,           Sin permiso.                 Solo recursos asociados a su cuenta.
+ catálogo y lotes
+ Crear y cancelar reservas    Solo sus reservas activas, según Sin creación de reservas de
+                              vigencia.                        consumidores.
+ Consultar historial y código Solo operaciones propias.        Reservas recibidas por sus lotes;
+ de retiro                                                     acceso al código limitado a la
+                                                               validación y el detalle operativo.
+ Confirmar una entrega        Presenta el código; no cambia el Valida el código de una reserva
+                              estado a retirada.               activa de su comercio.
+ Consultar indicadores        Historial personal de reservas.  Historial e indicadores de su
+                                                               comercio.
+
+Tabla 25 - Permisos de los perfiles de la aplicación
+
+Política de Respaldo de la información
+
+          El código de la aplicación se almacenó en un repositorio privado de GitHub. Además, una
+vez por semana se realiza una copia del repositorio, que se guarda cifrada en un espacio privado
+de Cloudflare R2.
+          Las imágenes y los archivos estáticos de la aplicación también se respaldan en ese espacio.
+Para ello, todos los días a las 05:00 UTC, equivalente a las 02:00 de Argentina, se ejecuta un
+proceso automático que copia los archivos nuevos o modificados. Estas copias permiten contar
+con un respaldo para recuperar la información en caso de una eliminación por error o una falla en
+el almacenamiento.
+          Con respecto a la base de datos, Supabase proporciona una copia diaria y permite acceder
+a los respaldos de los últimos siete días. Estas copias incluyen la información almacenada en la
+base de datos. (Supabase, 2026b)
+                                                                                                  53
+
+
+
+                                                 Análisis de Costos
+         En esta sección se detallan los costos necesarios para desarrollar el proyecto. Se
+consideraron tanto los recursos tecnológicos como los recursos humanos necesarios para su
+implementación.
+
+Equipo
+
+         El equipo se compone de un líder de proyecto, un analista funcional y un desarrollador full
+stack. El Sprint Backlog representa 29,5 jornadas equivalentes. Para valorarlo se utilizó una
+jornada de ocho horas: 236 horas de construcción, integración y pruebas de las funciones. La
+estimación total es de 356 horas persona distribuidas durante aproximadamente tres meses.
+
+
+ Actividad                                                      Responsable                     Horas
+ Planificación, seguimiento del alcance, costos y riesgos       Líder de proyecto                32
+ Análisis del proceso, requisitos y criterios de aceptación Analista funcional                    32
+ Validación funcional y revisión con el comercio de Analista funcional                            16
+ referencia
+ Sprint 1: cuentas y gestión del comercio; 7 jornadas       Desarrollador full stack              56
+ Sprint 2: catálogo, lotes y búsqueda; 8 jornadas               Desarrollador full stack          64
+ Sprint 3: reserva, cancelación, vencimiento y retiro; 8,5      Desarrollador full stack          68
+ jornadas
+ Sprint 4: historial, indicadores, adaptación y pruebas; 6      Desarrollador full stack          48
+ jornadas
+ Diseño técnico de datos, permisos e integración                Desarrollador full stack          16
+ Configuración de servicios, correo, copias y despliegue        Desarrollador full stack          24
+ Total del proyecto                                             Tres integrantes                 356
+         Tabla 26 - Distribución del esfuerzo del proyecto.
+
+
+         Los honorarios se tomaron de la tabla del Consejo Profesional de Ciencias Informáticas de
+la Provincia de Córdoba (CPCIPC, 2026), actualizada a agosto de 2026 y consultada el 15 de
+octubre de 2026. Se utilizaron los valores de hora a demanda para Líder o Jefe de Proyectos,
+Analista Funcional Senior y Desarrollador Full Stack Developer. Esta modalidad permite valorar
+dedicaciones parciales sin convertir un salario mensual en una tarifa horaria mediante un divisor
+supuesto. Los importes representan honorarios de referencia para presupuestar el proyecto.
+                                                                                                          54
+
+
+ Rol                                         Cant.     Horas      ARS por hora            Total ARS
+ Líder de proyecto                            1          32        86.942,27             2.782.152,64
+ Analista funcional                           1          48        62.974,92             3.022.796,16
+ Desarrollador full stack                     1         276        100.595,04            27.764.231,04
+ Total                                        3         356            —                 33.569.179,84
+
+Tabla 27 - Costo de desarrollo por rol.
+
+
+Fuente: Elaboración propia con tarifas de hora a demanda de CPCIPC (2026), actualización 08/2026. Consulta:
+15/10/2026. Costo único por el alcance definido.
+
+Recursos Técnicos
+
+          Para expresar los costos de los servicios en pesos argentinos, se adoptó como referencia un
+tipo de cambio de ARS 1.530 por cada dólar estadounidense, correspondiente a la cotización
+vendedora del Banco de la Nación Argentina publicada por Ámbito el 15 de octubre de 2026. Los
+importes en pesos se calcularon multiplicando los valores en dólares por dicha cotización (Ámbito,
+2026).
+
+
+ Concepto y          Consumo o            Unitario   Unitario     Total
+                                                                           Total ARS       Período y fuente
+ cantidad            alcance              USD        ARS          USD
+                     API; 512 MB                                                           Mensual. Render
+ Render: 1           de RAM y                                                              (s. f.).
+                                            7,00      10.710,00     7,00     10.710,00
+ servicio web        menos de 1                                                            https://render.co
+                     CPU.                                                                  m/pricing
+                     React;
+                     previsión
+ Render: 1                                                                                 Mensual. Render
+                     conjunta de 3
+ sitio estático                                                                            (s. f.).
+                     GB de salida al        0,00         0,00       0,00       0,00
+ y espacio                                                                                 https://render.co
+                     mes, dentro de
+ Hobby                                                                                     m/pricing
+                     los 5 GB
+                     incluidos.
+                     PostgreSQL,
+                     Auth y Storage;
+ Supabase: 1         1 GB de datos,                                                        Mensual.
+ proyecto Pro        2 GB de                                                               Supabase (s. f.).
+                                            25,00     38.250,00    25,00     38.250,00
+ con cómputo         archivos y                                                            https://supabase.
+ Micro               22,50 GB de                                                           com/pricing
+                     salida
+                     previstos.
+                                                                                                   55
+
+
+ Concepto y         Consumo o         Unitario   Unitario   Total
+                                                                       Total ARS    Período y fuente
+ cantidad           alcance           USD        ARS        USD
+                                                                                    Mensual, sujeto a
+                    Hasta 100                                                       cuota diaria.
+ Geoapify: 1        consultas/día;                                                  Geoapify (s. f.).
+                                        0,00         0,00       0,00      0,00
+ plan Free          cuota de 3.000                                                  https://www.geo
+                    créditos/día.                                                   apify.com/pricin
+                                                                                    g/
+                                                                                    Mensual.
+                    Hasta 8 GB-
+ Cloudflare R2                                                                      Cloudflare
+                    mes y
+ Standard: 1                                                                        (2026).
+                    operaciones         0,00         0,00       0,00      0,00
+ contenedor                                                                         https://developer
+                    dentro de la
+ privado                                                                            s.cloudflare.com/
+                    cuota gratuita.
+                                                                                    r2/pricing/
+ Subtotal mensual de servicios                                32,00    48.960
+ Subtotal anual de servicios                                 384,00    587.520,00
+Tabla 28 - Costos técnicos.
+Fuente: Elaboración propia
+
+         El costo total del proyecto se estimó en ARS 33.716.059,84 para un período de tres meses.
+Este importe incluyó ARS 33.569.179,84 correspondientes al desarrollo y ARS 146.880,00
+correspondientes a los servicios tecnológicos durante ese período. Para estos últimos, se consideró
+un costo mensual de USD 32 y un tipo de cambio de ARS 1.530 por dólar.
+
+
+                                          Análisis de Riesgos
+Identificación y análisis cualitativo de riesgos
+
+         A continuación, se presentan los riesgos identificados para el proyecto. Para cada uno se
+indicó su tipo, la probabilidad de que ocurriera y el impacto que podría generar. La probabilidad
+se clasificó como alta, media o baja, mientras que el impacto se valoró en cinco niveles: muy bajo,
+bajo, medio, alto y muy alto.
+         La probabilidad y el impacto de los riesgos se valoraron según el criterio del autor. Estas
+valoraciones se utilizaron como referencia para establecer su prioridad dentro del proyecto.
+
+
+ Id                     Riesgo                        Tipo             Probabilidad Impacto
+ 1 Reserva de una misma unidad por más de un Técnico                   Media        Muy alto
+    consumidor debido a operaciones simultáneas.
+ 2 Acceso o modificación de información de otros Técnico               Baja            Muy alto
+    usuarios o comercios por errores en los permisos.
+                                                                                          56
+
+
+ Id                       Riesgo                          Tipo     Probabilidad Impacto
+ 3 Reservas o retiros fuera del horario permitido por   Técnico    Baja         Alto
+    errores en el control de vencimientos.
+ 4 Pérdida de información o imágenes por errores        Técnico    Media       Muy alto
+    de almacenamiento o fallas en los respaldos.
+ 5 Caída de los servicios de alojamiento,               Técnico    Media       Alto
+    autenticación, base de datos o conexión a
+    internet durante los retiros.
+ 6 Subestimación del tiempo necesario para              Proyecto   Alta        Alto
+    desarrollar e integrar las funciones de la
+    plataforma.
+ 7 Diferencias entre las cantidades publicadas y las    Proyecto   Media       Alto
+    disponibles por ventas realizadas fuera de la
+    plataforma.
+ 8 Ubicación incorrecta de un comercio por errores      Técnico    Media       Medio
+    en la dirección o en el servicio de
+    geocodificación.
+ 9 Aumento de los costos por cambios en las tarifas,    Proyecto   Media       Medio
+    el tipo de cambio o el consumo de los servicios.
+ 10 Publicación de alimentos que no cumplan con las     Proyecto   Media       Muy alto
+    condiciones de conservación o aptitud para el
+    consumo.
+ 11 Demoras en las búsquedas y reservas por un          Técnico    Media       Medio
+    aumento de solicitudes simultáneas.
+ 12 Uso indebido de cuentas o servicios por             Seguridad Media        Muy alto
+    exposición de contraseñas y credenciales de
+    acceso.
+ 13 Rotación del personal o del equipo                  Proyecto   Media       Alto
+Tabla 29 - Riesgos identificados en el Proyecto
+Fuente. Elaboración propia.
+                                                                                                   57
+
+
+Matriz de Riesgos
+
+         La matriz de riesgos permitió relacionar la probabilidad de ocurrencia con el impacto de
+cada riesgo para establecer su prioridad. Para ello, se utilizaron las escalas numéricas presentadas
+en la tabla 30.
+
+
+
+
+Tabla 30 - Matriz de Riesgos
+Fuente. Elaboración propia.
+
+
+Análisis cuantitativo y priorización de riesgos
+
+         Para priorizar los riesgos, se calculó un índice de exposición multiplicando los valores de
+probabilidad e impacto establecidos en la matriz. Luego, los riesgos se ordenaron de mayor a
+menor exposición. El porcentaje individual se obtuvo dividiendo el índice de cada riesgo por la
+suma de todos los índices, mientras que el porcentaje acumulado se calculó sumando esos
+porcentajes en el orden presentado.
+
+
+                                  Probabilidad
+                                                        Índice de                        Porcentaje
+    ID              Riesgo             de      Impacto            Porcentaje
+                                                       exposición                        acumulado
+                                   ocurrencia
+              Subestimación
+              del       tiempo
+              necesario para
+     6        desarrollar     e       0,7           4          2,8          11%              11%
+              integrar      las
+              funciones de la
+              plataforma.
+              Reserva de una
+              misma unidad
+     1                                0,5           5          2,5          10%              20%
+              por más de un
+              consumidor
+                                                                               58
+
+
+                         Probabilidad
+                                               Índice de              Porcentaje
+ID       Riesgo               de      Impacto            Porcentaje
+                                              exposición              acumulado
+                          ocurrencia
+     debido         a
+     operaciones
+     simultáneas.
+     Pérdida        de
+     información o
+     imágenes      por
+4    errores        de       0,5         5        2,5       10%          30%
+     almacenamiento
+     o fallas en los
+     respaldos.
+     Publicación de
+     alimentos que
+     no cumplan con
+10   las condiciones         0,5         5        2,5       10%          40%
+     de conservación
+     o aptitud para el
+     consumo.
+     Uso indebido de
+     cuentas         o
+     servicios     por
+12   exposición de           0,5         5        2,5       10%          49%
+     contraseñas y
+     credenciales de
+     acceso.
+     Caída de los
+     servicios      de
+     alojamiento,
+     autenticación,
+5                            0,5         4        2          8%          57%
+     base de datos o
+     conexión        a
+     internet durante
+     los retiros.
+     Diferencias
+     entre         las
+     cantidades
+     publicadas y las
+7                            0,5         4        2          8%          65%
+     disponibles por
+     ventas
+     realizadas fuera
+     de la plataforma.
+                                                                                                   59
+
+
+                                         Probabilidad
+                                                               Índice de                 Porcentaje
+     ID               Riesgo                  de      Impacto            Porcentaje
+                                                              exposición                 acumulado
+                                          ocurrencia
+               Rotación        del
+     13        personal o del                   0,5           4   2          8%             72%
+               equipo.
+               Acceso            o
+               modificación de
+               información de
+      2        otros usuarios o                 0,3           5   1,5        6%             78%
+               comercios por
+               errores en los
+               permisos.
+               Ubicación
+               incorrecta de un
+               comercio        por
+      8        errores en la                    0,5           3   1,5        6%             84%
+               dirección o en el
+               servicio         de
+               geocodificación.
+               Aumento de los
+               costos          por
+               cambios en las
+      9        tarifas, el tipo de              0,5           3   1,5        6%             90%
+               cambio o el
+               consumo de los
+               servicios.
+               Demoras en las
+               búsquedas         y
+               reservas por un
+     11                                         0,5           3   1,5        6%             95%
+               aumento          de
+               solicitudes
+               simultáneas.
+               Reservas          o
+               retiros fuera del
+               horario
+      3        permitido por                    0,3           4   1,2        5%             100%
+               errores en el
+               control          de
+               vencimientos.
+Tabla 31 - Análisis cuantitativo y priorización de riesgos.
+Fuente: Elaboración propia.
+
+
+          A continuación, se presenta un gráfico de Pareto para representar la priorización de los
+riesgos. Las barras mostraron el índice de exposición de cada riesgo y la curva indicó el porcentaje
+                                                                                                        60
+
+
+acumulado sobre la suma de todos los índices. Los primeros nueve riesgos concentraron el 78,08
+% del total.
+
+
+
+
+       Ilustración 19 - Priorización de riesgos de exposición
+
+
+
+Plan de contingencia
+
+       Para desarrollar el plan de contingencia, se seleccionaron los nueve riesgos de mayor
+exposición, que concentraron el 78,08 % de la suma de los índices calculados.
+
+
+ ID          Riesgo                                               Contingencia
+      Subestimación del               Ajustar el cronograma, reorganizar las tareas del equipo y dar
+  6
+      tiempo de desarrollo.           prioridad a las funciones principales de la plataforma.
+                                      Interrumpir las nuevas reservas de la publicación afectada y
+      Reserva de una
+                                      revisar los registros para identificar las operaciones confirmadas.
+      misma unidad por
+  1                                   Informar a los consumidores involucrados y resolver las reservas
+      más de un
+                                      que no puedan cumplirse. Corregir el problema y verificar las
+      consumidor.
+                                      cantidades antes de reanudar las reservas.
+                                      Recuperar la información desde los respaldos disponibles y
+      Pérdida de
+                                      comprobar su integridad antes de retomar las operaciones. Para
+  4   información o
+                                      las imágenes sin respaldo, solicitar al comercio que las cargue
+      imágenes.
+                                      nuevamente.
+    Publicación de                    Retirar la publicación, impedir nuevas reservas e informar a los
+ 10 alimentos no aptos                consumidores afectados. Coordinar con el comercio la resolución
+    para el consumo.                  de las reservas existentes y revisar lo sucedido.
+                                      Reemplazar las credenciales comprometidas, revocar las sesiones
+    Exposición de
+                                      o accesos afectados según corresponda y revisar las operaciones
+ 12 contraseñas y
+                                      realizadas. Corregir la causa de la exposición antes de restablecer
+    credenciales.
+                                      el acceso.
+                                                                                                         61
+
+
+ ID               Riesgo                                       Contingencia
+                                   Identificar el servicio afectado e informar la interrupción. Al
+        Caída de servicios o
+                                   restablecerse, verificar el estado de las reservas antes de retomar
+  5     de la conexión a
+                                   las operaciones, evitando duplicar registros o confirmar entregas
+        internet.
+                                   sin comprobar su situación.
+                                   Detener las nuevas reservas del lote, contrastar las existencias
+        Diferencias entre las
+                                   con las reservas confirmadas y actualizar la disponibilidad.
+  7     cantidades publicadas
+                                   Contactar a los consumidores cuyas reservas no puedan
+        y disponibles.
+                                   cumplirse.
+                                   Reasignar las tareas pendientes, revisar el cronograma y realizar
+        Rotación del personal
+ 13                                el traspaso de documentación y accesos necesarios. Revocar los
+        o del equipo.
+                                   accesos que ya no correspondan.
+                                   Restringir el acceso afectado, revisar los permisos y determinar
+        Acceso o
+                                   qué registros fueron consultados o modificados. Corregir las
+  2     modificación de
+                                   autorizaciones y verificar el aislamiento entre usuarios y
+        información ajena.
+                                   comercios antes de restablecer el acceso.
+Tabla 32 - Plan de contingencias
+                                                                                                  62
+
+
+
+                                          Conclusiones
+
+       El trabajo tuvo como objetivo organizar la gestión de excedentes alimentarios en comercios
+gastronómicos mediante una plataforma web. La necesidad estaba en relacionar las publicaciones
+con las cantidades disponibles y las reservas, manteniendo un seguimiento hasta el retiro de los
+productos.
+       Para resolverlo, se definieron las funciones de los comercios y de los consumidores, junto
+con las interfaces y los datos necesarios para cada operación. El control de disponibilidad fue uno
+de los aspectos que requirió mayor atención, porque debía contemplar las reservas, las
+cancelaciones y los vencimientos. Esto permitió establecer cómo debía comportarse la plataforma
+ante las distintas situaciones del proceso.
+       En relación con el objetivo general, se implementó el flujo principal de publicación, reserva
+y confirmación del retiro de los excedentes alimentarios. El comercio pudo publicar un lote, el
+consumidor pudo reservar sus unidades y el comercio pudo confirmar la entrega mediante el
+código de retiro. Las operaciones quedaron almacenadas para su posterior consulta. De esta
+manera, se concretó la integración de las funciones principales previstas para ambos perfiles dentro
+de una misma plataforma.
+       Además, se analizaron las medidas de seguridad, los costos de desarrollo y operación y los
+riesgos del proyecto. Estos análisis permitieron estimar los recursos necesarios y definir medidas
+de contingencia frente a problemas que pudieran afectar el servicio o la información.
+       El trabajo permitió aplicar los conocimientos adquiridos durante la carrera y emplearlos en
+el análisis y diseño de una solución para la gestión de excedentes alimentarios. Se integraron el
+relevamiento de necesidades, la definición de requisitos, el diseño de interfaces y datos y la
+evaluación de seguridad, costos y riesgos. Este proceso permitió relacionar las decisiones técnicas
+con las necesidades de los usuarios y reconocer la importancia de mantener la coherencia entre las
+distintas etapas del proyecto.
+                                                                                                63
+
+
+
+                                               Demo
+
+       A través del siguiente enlace se puede acceder a la carpeta de Google Drive que reúne toda
+la información y los materiales necesarios para revisar el proyecto, incluidos el instructivo para
+ejecutar el prototipo, el video explicativo y el código fuente.
+
+
+       https://drive.google.com/drive/u/0/folders/1Y9Ry0CugoTiLP9cEoDLOHSrIBrCzGFvf
+                                                                                                 64
+
+
+
+                                          Referencias
+Ámbito. (2026, 15 de octubre). Dólar hoy: a cuánto cotiza este jueves 15 de octubre.
+       https://www.ambito.com/finanzas/dolar-hoy-cuanto-cotiza-este-jueves-15-octubre-
+       n6333948
+
+
+Argentina.gob.ar. (2019, 15 de febrero). Concurso de soluciones dirigidas a reducir pérdidas y
+       desperdicios          en          la            cadena        hortícola          argentina.
+       https://www.argentina.gob.ar/noticias/concurso-de-soluciones-dirigidas-reducir-perdidas-
+       y-desperdicios-en-la-cadena-horticola
+
+
+Cheaf. (s. f.). Rescatá comida, reducí el desperdicio y ahorrá plata. https://www.cheaf.com/ar/
+
+
+Cloudflare. (2026, 30 de octubre). Pricing. Recuperado el 8 de noviembre de 2026, de
+       https://developers.cloudflare.com/r2/pricing/
+
+
+Congreso de la Nación Argentina. (2018). Ley 27.454: Plan Nacional de Reducción de Pérdidas
+       y Desperdicio de Alimentos. https://www.argentina.gob.ar/normativa/nacional/ley-27454-
+       315735
+
+
+Consejo Profesional de Ciencias Informáticas de la Provincia de Córdoba. (2026, 14 de
+       septiembre). Honorarios recomendados actualizados [Actualización de agosto de 2026].
+       https://cpcipc.org.ar/honorarios-recomendados-actualizados-agosto-26/
+
+
+Express.js. (s. f.). Express: Node.js web application framework. https://expressjs.com/
+
+
+Fielding, R. T. (2000). Architectural styles and the design of network-based software architectures
+       [Tesis         doctoral,         University              of     California,         Irvine].
+       https://ics.uci.edu/~fielding/pubs/dissertation/top.htm
+                                                                                                                       65
+
+
+Geoapify. (s. f.). Geoapify API pricing. Recuperado el 15 de octubre de 2026, de
+         https://www.geoapify.com/pricing/
+
+
+Google       for        Developers.     (2026,        4    de      noviembre).       Geocoding        API       overview.
+         https://developers.google.com/maps/documentation/geocoding/guides-v3/overview
+
+
+MDN          Web         Docs.      (2026,       4        de      septiembre).          Responsive       web      design.
+         https://developer.mozilla.org/en-
+         US/docs/Learn_web_development/Core/CSS_layout/Responsive_Design
+
+
+Michelini, L., Principato, L., & Iasevoli, G. (2018). Understanding food sharing models to tackle
+         sustainability           challenges.             Ecological            Economics,        145,          205–217.
+         https://doi.org/10.1016/j.ecolecon.2017.09.009
+
+
+OpenJS       Foundation.          (s.   f.).     About         Node.js.        Node.js.    https://nodejs.org/en/about
+
+
+Organización de las Naciones Unidas para la Alimentación y la Agricultura. (2019). El estado
+         mundial de la agricultura y la alimentación 2019: Progresos en la lucha contra la pérdida
+         y         el         desperdicio        de            alimentos.         https://doi.org/10.4060/CA6030ES
+
+
+Papargyropoulou, E., Lozano, R., Steinberger, J. K., Wright, N., & Bin Ujang, Z. (2014). The food
+         waste hierarchy as a framework for the management of food surplus and food waste.
+         Journal of Cleaner Production, 76, 106–115. https://doi.org/10.1016/j.jclepro.2014.04.020
+
+
+PostgreSQL         Global       Development          Group.       (s.   f.).    About     PostgreSQL.       PostgreSQL.
+         https://www.postgresql.org/about/
+
+
+Programa de las Naciones Unidas para el Medio Ambiente. (2024). Food waste index report 2024:
+         Think          eat     save—Tracking             progress        to      halve      global      food      waste.
+         https://wedocs.unep.org/handle/20.500.11822/45230
+                                                                                                 66
+
+
+React Team. (s. f.). React: The library for web and native user interfaces. https://react.dev/
+
+
+Render. (s. f.). Pricing. Recuperado el 15 de octubre de 2026, de https://render.com/pricing
+
+
+Schwaber, K., & Sutherland, J. (2020). La guía de Scrum: La guía definitiva de Scrum: Las reglas
+       del juego. https://scrumguides.org/docs/scrumguide/v2020/2020-Scrum-Guide-Spanish-
+       Latin-South-American.pdf
+
+
+Supabase. (s. f.). Pricing & fees. Recuperado el 15 de octubre de 2026, de
+       https://supabase.com/pricing
+
+
+Supabase. (2026a, 22 de octubre). Auth. https://supabase.com/docs/guides/auth
+
+
+Supabase. (2026b, 5 de noviembre). Database backups.
+       https://supabase.com/docs/guides/platform/backups
+
+
+Supabase. (2026c, 1 de octubre). Password security.
+       https://supabase.com/docs/guides/auth/password-security
+
+
+Too   Good     To    Go.   (s.   f.).   How   does    the   Too   Good     To   Go      app   work?
+       https://www.toogoodtogo.com/en-us/how-does-the-app-work
+
+
+Wobox. (s. f.). Bajá el desperdicio, subí las ventas de tu negocio. https://wobox.ar/
+                                                                                            67
+
+
+
+                                           Anexo
+
+
+Anexo 1. Guía de Entrevista a Comercios
+
+          - ¿Qué productos suelen quedar sin vender y con qué frecuencia ocurre?
+          - ¿En qué momento del día se reconoce la cantidad que quedará disponible?
+          - ¿Quién decide si un producto puede ofrecerse con descuento y qué información
+              utiliza?
+          - ¿Qué acciones se realizan actualmente para vender, conservar, donar o descartar el
+              excedente?
+          - ¿Qué canales se utilizan para comunicar promociones y quién los actualiza?
+          - ¿Cómo se evita comprometer la misma unidad con más de una persona?
+          - ¿Qué sucede cuando una reserva no se retira dentro del horario acordado?
+          - ¿Qué datos serían útiles para analizar pérdidas y ajustar la producción?
+          - ¿Cuánto tiempo podría dedicar el personal a registrar una publicación?
+          - ¿Qué condición tendría que cumplir una herramienta para incorporarse al trabajo
+              diario?
+                                                                                            68
+
+
+Anexo 2. Ejemplo del registro de excedentes y reservas del comercio
+
+       Nota. Elaboración propia a partir del relevamiento del comercio. Se utilizaron datos de
+ejemplo para representar sus registros y conversaciones, sin exponer información personal ni
+comercial.
+
+
+
+
+    Ilustración 20 - Ejemplo del registro de excedentes
+
+
+
+
+   Ilustración 21 - Ejemplos de reservas realizadas con sus estados
+                                                                                              69
+
+
+Anexo 3. Consultas por redes sociales
+
+         Nota. Elaboración propia a partir del relevamiento del comercio. Se utilizaron datos de
+ejemplo para representar sus registros y conversaciones, sin exponer información personal ni
+comercial.
+
+
+
+
+ Ilustración 22 - Ejemplos de conversaciones con clientes
+
