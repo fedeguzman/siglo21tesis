@@ -37,7 +37,7 @@ Geocodificación: Nominatim/OpenStreetMap (`nominatim.openstreetmap.org`), consu
 
 Ver `docs/alcance.md` para la correspondencia con las historias HU-001 a HU-016 y los pendientes de infraestructura. El PDF se transcribió en `docs/tesis.txt` como referencia de requisitos, no como instrucciones de ejecución. Las imágenes provienen de los HTML aportados.
 
-El frontend está publicado en [Vercel](https://siglo21tesis.vercel.app/) y las migraciones de negocio y Storage se aplicaron en Supabase. El despliegue de la API en Render y los respaldos remotos siguen pendientes. El estado y las verificaciones están en [Continuar el desarrollo](docs/CONTINUAR.md).
+El frontend está publicado en [Vercel](https://siglo21tesis.vercel.app/). Supabase tiene las migraciones de negocio, Storage y permisos exclusivos del rol de Express aplicadas. Auth tiene las URLs de producción y requisitos de contraseña configurados; falta SMTP. La API usa una credencial exclusiva y verifica el certificado TLS con la CA pública de Supabase. Render se configura con plan Free; el despliegue y los respaldos remotos siguen pendientes. El estado y las verificaciones están en [Continuar el desarrollo](docs/CONTINUAR.md).
 
 ## Verificación de esta implementación
 

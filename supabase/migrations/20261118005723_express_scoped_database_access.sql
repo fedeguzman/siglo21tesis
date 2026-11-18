@@ -1,0 +1,23 @@
+-- Dedicated trusted Express login; never usable through PostgREST.
+alter role excedentes_api noinherit;
+grant connect on database postgres to excedentes_api;
+grant usage on schema public to excedentes_api;
+revoke all on public.profiles, public.shops, public.products, public.lots, public.reservations, public.reservation_events from anon, authenticated;
+grant select, insert on public.profiles, public.products, public.reservation_events to excedentes_api;
+grant select, insert, update on public.shops, public.lots, public.reservations to excedentes_api;
+grant usage on sequence public.reservation_events_id_seq to excedentes_api;
+create policy express_read_profiles on public.profiles for select to excedentes_api using (true);
+create policy express_insert_profiles on public.profiles for insert to excedentes_api with check (true);
+create policy express_read_products on public.products for select to excedentes_api using (true);
+create policy express_insert_products on public.products for insert to excedentes_api with check (true);
+create policy express_read_events on public.reservation_events for select to excedentes_api using (true);
+create policy express_insert_events on public.reservation_events for insert to excedentes_api with check (true);
+create policy express_read_shops on public.shops for select to excedentes_api using (true);
+create policy express_insert_shops on public.shops for insert to excedentes_api with check (true);
+create policy express_update_shops on public.shops for update to excedentes_api using (true) with check (true);
+create policy express_read_lots on public.lots for select to excedentes_api using (true);
+create policy express_insert_lots on public.lots for insert to excedentes_api with check (true);
+create policy express_update_lots on public.lots for update to excedentes_api using (true) with check (true);
+create policy express_read_reservations on public.reservations for select to excedentes_api using (true);
+create policy express_insert_reservations on public.reservations for insert to excedentes_api with check (true);
+create policy express_update_reservations on public.reservations for update to excedentes_api using (true) with check (true);
