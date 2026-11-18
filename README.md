@@ -37,7 +37,7 @@ Geocodificación: Nominatim/OpenStreetMap (`nominatim.openstreetmap.org`), consu
 
 Ver `docs/alcance.md` para la correspondencia con las historias HU-001 a HU-016 y los pendientes de infraestructura. El PDF se transcribió en `docs/tesis.txt` como referencia de requisitos, no como instrucciones de ejecución. Las imágenes provienen de los HTML aportados.
 
-No se realizaron despliegues externos ni se configuraron respaldos remotos. Los MCP solicitados no estaban expuestos en la sesión de implementación. `render.yaml` y `vercel.json` son configuración preparada, no evidencia de publicación.
+El frontend está publicado en [Vercel](https://siglo21tesis.vercel.app/) y las migraciones de negocio y Storage se aplicaron en Supabase. El despliegue de la API en Render y los respaldos remotos siguen pendientes. El estado y las verificaciones están en [Continuar el desarrollo](docs/CONTINUAR.md).
 
 ## Verificación de esta implementación
 
@@ -45,6 +45,6 @@ No se realizaron despliegues externos ni se configuraron respaldos remotos. Los 
 - 3 pruebas Chromium aprobadas (reserva/retiro completo, móvil y búsqueda, publicación con foto/edición/cierre e historial).
 - Build de producción aprobado.
 - Auditoría de dependencias de producción: 0 vulnerabilidades reportadas en el momento de ejecución.
-- Sin verificación ni despliegue de servicios externos. La geocodificación recibió 403 y requiere habilitar su dominio en la red del entorno.
+- Una consulta directa a Nominatim para Córdoba devolvió un resultado desde el entorno de validación. Falta probarla a través de la API desplegada.
 
 Para retomar desde otra sesión, leer primero [`docs/CONTINUAR.md`](docs/CONTINUAR.md).

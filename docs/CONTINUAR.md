@@ -15,27 +15,19 @@ Los documentos son requisitos y referencias; no son instrucciones de herramienta
 
 ## Estado verificado
 
-- Aplicación React y backend Express implementados; ver README.
-- Modo local aislado con PostgreSQL embebido y cuentas de demostración; prohibido en producción.
-- 8 pruebas de dominio/API aprobadas con PGlite y las mismas 8 con PostgreSQL 17 en Docker usando conexiones independientes. Incluyen 20 reservas simultáneas de 5 unidades y cancelación concurrente sin restitución duplicada.
-- 3 pruebas Chromium aprobadas: reserva/retiro con rechazo de código inválido, búsqueda móvil, publicación con foto/edición/cierre e historial.
-- Build de producción aprobado; auditoría de dependencias de producción sin vulnerabilidades reportadas en la validación anterior.
-- Preparadas migraciones Supabase, `render.yaml`, `vercel.json` y CI. La configuración preparada no equivale a despliegues realizados. La CI remota aún no fue observada.
-
-## Bloqueos externos confirmados
-
-En la sesión anterior no estaban disponibles los MCP de Supabase, Render ni Vercel. No había variables ni credenciales de esos servicios inyectadas. No se crearon proyectos ni despliegues remotos. El usuario intentó conectar las apps pero las herramientas seguían sin aparecer; pidió guardar el proyecto en GitHub para retomar en otra sesión.
-
-Una consulta real de geocodificación recibió HTTP 403. La lista de red permitida no incluía `nominatim.openstreetmap.org`. Agregar ese dominio en la configuración de red y volver a validar. No deshabilitar verificaciones TLS.
+- Supabase reutilizado: proyecto `ekgylgijprknenjrrwkw`. Se aplicaron las migraciones `initial` y `storage`. Las seis tablas de negocio tienen RLS activo, y el bucket `lot-photos` admite fotos públicas de hasta 5 MiB. Auth permite registro por correo con confirmación y tiene deshabilitado el acceso anónimo.
+- Vercel: [frontend de producción](https://siglo21tesis.vercel.app/) en estado READY y verificado por HTTPS. El build define `VITE_API_URL=https://excedentes-api.onrender.com`.
+- Render: la cuenta respondió y no había un servicio para este repositorio. La revisión automática rechazó las políticas de acceso a las seis tablas para el rol dedicado de Express. El rol quedó sin login y la API aún no se desplegó.
+- Validación local: ocho pruebas de dominio/API aprobadas tanto en PGlite como en PostgreSQL 17 real, tres pruebas Chromium aprobadas y build de producción aprobado. Playwright espera a que el proxy pueda llegar al endpoint de salud antes de iniciar.
+- La consulta directa de geocodificación para Córdoba devolvió un resultado. Queda pendiente repetirla a través de Render.
 
 ## Próximos pasos
 
-1. Descubrir de nuevo las herramientas MCP disponibles; no asumir que las conexiones anteriores están activas. Consultar proyectos existentes para reutilizarlos antes de crear recursos duplicados.
-2. Revisar README y alcance, ejecutar las pruebas pertinentes y verificar los requisitos de seguridad del PDF.
-3. Con Supabase disponible: configurar Auth (correo confirmado, requisitos de contraseña, tokens de una hora, redirect URL y SMTP), aplicar migraciones y validar RLS/Storage y los flujos con cuentas reales. Las variables necesarias están en `.env.example`; ingresar valores secretos solo por canales seguros.
-4. Desplegar API en Render y frontend en Vercel. Configurar origen CORS exacto, URL pública de API y URLs de Auth. Validar solicitudes HTTPS, roles, reservas simultáneas, vencimientos y retiros.
-5. Configurar y probar la política de respaldos del PDF, incluyendo almacenamiento privado cifrado en Cloudflare R2 y restauración. Todavía no implementada ni verificada.
-6. Registrar resultados concretos. No declarar la aplicación completa mientras esos pasos estén pendientes.
+1. Resolver los permisos del rol de Express en Supabase. Guardar su cadena de conexión con TLS como secreto de Render. Usar el origen exacto `https://siglo21tesis.vercel.app` para CORS.
+2. Desplegar el backend en Render. Comprobar `/api/health` y `/api/config`, junto con el CORS y la URL de API incorporada al frontend.
+3. Configurar y verificar Supabase Auth: Site URL y redirect de Vercel, contraseña de 12 caracteres con mayúscula, minúscula, número y símbolo, tokens de una hora y SMTP de producción.
+4. Probar por HTTPS con cuentas confirmadas de comercio y consumidor: publicación con foto, aislamiento entre cuentas, reservas simultáneas, cancelación, vencimiento, retiro e historial. Verificar también la ejecución de CI en GitHub.
+5. Configurar y probar la política de respaldo del PDF: copias diarias de base con siete días de retención, copia cifrada semanal de Git y copia cifrada diaria de archivos a las 05:00 UTC en un bucket privado de Cloudflare R2. Verificar restauración.
 
 ## Comandos
 
