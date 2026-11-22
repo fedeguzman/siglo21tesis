@@ -8,6 +8,8 @@ La autenticación y los datos siguen usando la integración existente. Se carga 
 
 La validación local incluye 21 pruebas de navegador y 12 pruebas de API/dominio. Comprueba anchos 320/390/430/768/1280, barra inferior horizontal, tarjetas de una columna, ausencia de desbordamiento, filtros/geolocalización, foco de teclado, cantidad, reserva/código/cancelación/historial y el flujo de entrega del comercio. La suite usa una base en memoria nueva por ejecución para no consumir el stock de corridas anteriores. Ver el informe para el estado de despliegue y la verificación HTTPS. SMTP y respaldos externos siguen pendientes por decisión previa; todos los servicios conservan planes gratuitos.
 
+1.1.0 ya fue publicada y validada por HTTPS con ambos roles. La etiqueta apunta a `f03355c`, CI `44988158026` terminó correctamente, Vercel READY y Render live para ese commit. El lote QA final `2d139cac-f6e3-4c8d-9cb4-a55ba97ac754` quedó cerrado, con una cancelación, un retiro y cero reservas activas. Se verificaron recarga/reapertura y renovación real del token del consumidor. Ver `docs/REVISION_1.1.0.md` para la evidencia y los límites de la emulación mobile. Los cambios posteriores a la etiqueta solo documentan la validación y refuerzan la selección del lote exacto en el script local de prueba; no cambian el código publicado de la aplicación.
+
 ## Revisión 1.0.1 (base 1.0.0)
 
 Se corrigió la pérdida de sesión del frontend (`persistSession:false`), la restauración inicial y el descarte de respuestas tardías. La sesión se conserva al recargar/reabrir y se cierra en las pestañas de la misma sesión; logout limpia los datos, ubicación y filtros de la cuenta. Se actualizan datos al navegar y se explican los errores HTML/429 sin errores técnicos de JSON.
