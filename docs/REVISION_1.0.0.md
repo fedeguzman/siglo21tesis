@@ -33,4 +33,8 @@
 
 Después de publicar, comprobar que Vercel y Render ejecuten el commit esperado, que la API conecte a la base y que ambas cuentas conserven sesión tras recargar y reabrir por HTTPS. La validación local se realizó antes de cualquier push de esta versión.
 
+La validación real de 1.0.1 terminó correctamente con las dos cuentas: sesión tras recarga y reapertura, renovación real de token del consumidor, roles, consultas, geocodificación en Render, foto real y lectura pública en Storage, publicación, reserva, cancelación, retiro e historial. La base confirmó el lote QA cerrado, una reserva cancelada, una retirada y ninguna activa. Se canceló también la reserva QA pendiente del intento anterior. No se ejecutaron pagos reales.
+
+Para evitar contaminación entre escenarios, la suite local simula el proxy de Render y asigna una IP de prueba distinta a cada caso, manteniendo el límite de solicitudes activo. Se verifican además cero respuestas 429 inesperadas. La regresión de latencia pasó diez repeticiones, y las catorce pruebas pasaron en Chrome de escritorio y en Chromium 159 fijado por Playwright, la misma versión usada en CI. Esto no modifica el límite ni los permisos de producción.
+
 Las pruebas deterministas de registro/recuperación simulan Auth y no prueban la entrega de correo. SMTP y los respaldos R2 siguen pendientes por las decisiones y dependencias documentadas en `CONTINUAR.md`. No se presenta una restauración de respaldo ni correo de producción como validados. Render Free puede tardar al reanudarse por inactividad; no se contrataron planes pagos.

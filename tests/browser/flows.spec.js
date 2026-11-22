@@ -1,6 +1,13 @@
 import {test,expect} from '@playwright/test';
-test('consumidor reserva y comercio confirma entrega; historial conserva la operación',async({browser})=>{
- const consumer=await browser.newPage();const merchant=await browser.newPage();const errors=[];consumer.on('pageerror',e=>errors.push(e.message));merchant.on('pageerror',e=>errors.push(e.message));
+const quotaErrors=new WeakMap();
+test.beforeEach(async({context},info)=>{
+ // Isolate each scenario's quota while keeping the production limiter enabled.
+ await context.setExtraHTTPHeaders({'X-Forwarded-For':`198.18.${info.repeatEachIndex}.${info.line}`});
+ quotaErrors.set(context,[]);context.on('response',response=>{if(response.status()===429)quotaErrors.get(context).push(new URL(response.url()).pathname);});
+});
+test.afterEach(async({context})=>{expect(quotaErrors.get(context),'Las pruebas no deben compartir el cupo de solicitudes').toEqual([]);});
+test('consumidor reserva y comercio confirma entrega; historial conserva la operación',async({context})=>{
+ const consumer=await context.newPage();const merchant=await context.newPage();const errors=[];consumer.on('pageerror',e=>errors.push(e.message));merchant.on('pageerror',e=>errors.push(e.message));
  await consumer.goto('/');await consumer.getByRole('button',{name:'Entrar a la demostración'}).click();await expect(consumer.getByRole('heading',{name:'Algo rico merece otra oportunidad.'})).toBeVisible();
  await consumer.getByRole('button',{name:'Ver detalle'}).first().click();await consumer.getByRole('button',{name:'Confirmar reserva'}).click();await expect(consumer.getByRole('alert')).toContainText('Reserva confirmada');await consumer.getByRole('button',{name:'Ver reserva'}).first().click();const code=await consumer.locator('.pickup-code').innerText();
  await merchant.goto('/');await merchant.locator('select[name="role"]').selectOption('merchant');await merchant.getByRole('button',{name:'Entrar a la demostración'}).click();await merchant.getByRole('button',{name:'Reservas',exact:false}).first().click();await merchant.getByRole('button',{name:'Ver reserva'}).first().click();await merchant.getByLabel('Código presentado por el consumidor').fill('INVALIDO');await merchant.getByRole('button',{name:'Confirmar entrega'}).click();await expect(merchant.getByRole('dialog').getByRole('alert')).toContainText('incorrecto');await merchant.getByLabel('Código presentado por el consumidor').fill(code);await merchant.getByRole('button',{name:'Confirmar entrega'}).click();await expect(merchant.getByRole('alert')).toContainText('Entrega confirmada');

@@ -10,6 +10,10 @@ La versión está en `package.json` y se muestra en el pie de página. 1.0.0 se 
 
 Ver `docs/REVISION_1.0.0.md` para alcance y límites. La publicación debe seguir a las comprobaciones locales. Tras el push, verificar CI, Vercel READY y Render live para el commit publicado y repetir el recorrido completo por HTTPS. Cerrar los lotes QA y cancelar reservas QA activas al terminar, sin borrar el historial.
 
+El recorrido real de 1.0.1 ya terminó correctamente con ambas cuentas, incluyendo foto en Storage, publicación, reserva, cancelación, retiro e historial. La base confirmó que el lote QA `e9717333-6c7f-4076-9e2e-52d0f0d6ddd7` quedó cerrado, con una reserva cancelada, una retirada y cero activas. La sesión del consumidor renovó un token realmente por HTTPS. Se cerraron las sesiones usadas para la prueba. El ajuste posterior de la suite solo aísla cuotas entre escenarios y no cambia el código de aplicación de la etiqueta v1.0.1.
+
+Siguiente objetivo solicitado por el usuario: llevar la sección del consumidor a la experiencia mobile del prototipo original `docs/referencias/consumidor.html`, incluyendo navegación, distribución e interacción. La prueba actual de móvil solo comprueba ausencia de desbordamiento; no acredita fidelidad al prototipo. No crear otro objetivo hasta cerrar los controles de la revisión actual. Mantener la validación local antes del despliegue y los planes gratuitos.
+
 ## Objetivo y decisiones
 
 Sistema de tesis de Federico Guzmán: aplicaciones React de comercio y consumidor, PostgreSQL/Auth/Storage en Supabase, Express en Render y frontend en Vercel. Leer también `docs/alcance.md` y `docs/tesis.txt`; las referencias originales están en `docs/referencias/`.
