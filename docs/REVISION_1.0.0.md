@@ -1,4 +1,4 @@
-# Revisión de la versión 1.0.0
+# Revisión de las versiones 1.0.0 y 1.0.1
 
 ## Problemas corregidos
 
@@ -8,6 +8,7 @@
 - El cierre de sesión no esperaba al SDK. Ahora se espera, se informa cualquier error y se cierra únicamente la sesión actual, sin revocar sesiones de otros dispositivos.
 - Respuestas HTML y el límite de solicitudes podían mostrar errores técnicos de JSON. Se muestran mensajes comprensibles y se puede reintentar; HTTP 429 devuelve JSON.
 - Las credenciales incorrectas se explican en español. La versión aparece en el pie de página.
+- La validación real de 1.0.0 detectó que una segunda reserva podía anunciar éxito antes de que una actualización más reciente de la lista terminara. En 1.0.1, las mutaciones esperan la actualización vigente de la misma cuenta; se agregó una regresión con latencia deliberada. El seguimiento de cuenta activa impide mezclar respuestas al cambiar de sesión.
 
 ## Evidencia local antes del despliegue
 
@@ -24,7 +25,7 @@
 
 - `npm test`: 12 pruebas aprobadas con PGlite.
 - Las mismas 12 pruebas aprobadas sobre un PostgreSQL local efímero con conexiones independientes. CI usa PostgreSQL 17 en Docker.
-- `npm run test:e2e`: 13 pruebas aprobadas en Chrome sobre base local aislada.
+- `npm run test:e2e`: 14 pruebas aprobadas en Chrome sobre base local aislada, incluida la nueva regresión de latencia.
 - `npm run test:auth-real`: recorrido con las cuentas de comercio y consumidor suministradas, Supabase Auth real y datos de negocio exclusivamente locales; sin errores del navegador.
 - `npm run build`: aprobado. `npm audit --omit=dev`: cero vulnerabilidades reportadas.
 

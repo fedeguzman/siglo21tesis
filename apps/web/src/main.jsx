@@ -20,13 +20,14 @@ async function api(path,method='GET',body){return responseData(await fetch(API+'
 const Badge=({status})=><span className={'badge '+status}>{labels[status]||status}</span>;
 function Field({label,children,...props}){return <label className="field"><span>{label}</span>{children||<input {...props}/>}</label>;}
 function App(){
- const [authReady,setAuthReady]=useState(false);const authVersion=useRef(0),refreshVersion=useRef(0);
+ const [authReady,setAuthReady]=useState(false);const authVersion=useRef(0),refreshVersion=useRef(0),refreshInFlight=useRef(null),activeAccount=useRef(null);
  const [recovering,setRecovering]=useState(false),[config,setConfig]=useState(null),[user,setUser]=useState(null),[page,setPage]=useState('home'),[lots,setLots]=useState([]),[reservations,setReservations]=useState([]),[shop,setShop]=useState(null),[products,setProducts]=useState([]),[lotHistory,setLotHistory]=useState([]),[metrics,setMetrics]=useState(null),[modal,setModal]=useState(null),[notice,setNotice]=useState(null),[busy,setBusy]=useState(false),[filters,setFilters]=useState({q:'',category:'',maxPrice:'',distance:''}),[position,setPosition]=useState(null),[period,setPeriod]=useState(30),[reservationStatus,setReservationStatus]=useState(''),[lotFilter,setLotFilter]=useState(''),[reservationDate,setReservationDate]=useState('');
  const merchant=user?.role==='merchant';
  const flash=(text,error=false)=>setNotice({text,error});
  async function run(fn){setNotice(null);setBusy(true);try{await fn();}catch(e){flash(e.message,true);}finally{setBusy(false);}}
- function clearAccount(){refreshVersion.current++;setUser(null);setShop(null);setLots([]);setReservations([]);setProducts([]);setLotHistory([]);setMetrics(null);setModal(null);setRecovering(false);setPage('home');setNotice(null);setFilters({q:'',category:'',maxPrice:'',distance:''});setPosition(null);setReservationStatus('');setLotFilter('');setReservationDate('');setRegister(false);}
- async function restoreProfile(version=++authVersion.current){try{const profile=await api('/me');if(version===authVersion.current&&token)setUser(profile);}catch(e){if(version===authVersion.current)flash(e.message,true);}finally{if(version===authVersion.current)setAuthReady(true);}}
+ function setAccount(profile){activeAccount.current=profile?.id||null;setUser(profile);}
+ function clearAccount(){refreshVersion.current++;setAccount(null);setShop(null);setLots([]);setReservations([]);setProducts([]);setLotHistory([]);setMetrics(null);setModal(null);setRecovering(false);setPage('home');setNotice(null);setFilters({q:'',category:'',maxPrice:'',distance:''});setPosition(null);setReservationStatus('');setLotFilter('');setReservationDate('');setRegister(false);}
+ async function restoreProfile(version=++authVersion.current){try{const profile=await api('/me');if(version===authVersion.current&&token)setAccount(profile);}catch(e){if(version===authVersion.current)flash(e.message,true);}finally{if(version===authVersion.current)setAuthReady(true);}}
  useEffect(()=>{
   let active=true,subscription,client;
   api('/config').then(c=>{
@@ -36,7 +37,9 @@ function App(){
    ({data:{subscription}}=client.auth.onAuthStateChange((event,session)=>{
     if(!active)return;const version=++authVersion.current;
     if(event==='PASSWORD_RECOVERY')setRecovering(true);
-    token=session?.access_token||null;
+    const incoming=session?.user?.id||null;
+    if(incoming&&activeAccount.current&&incoming!==activeAccount.current){clearAccount();setAuthReady(false);}
+    activeAccount.current=incoming;token=session?.access_token||null;
     if(token){
      // Keep Supabase callbacks synchronous to avoid its auth lock; ignore stale profile responses.
      setTimeout(()=>{if(active&&version===authVersion.current)void restoreProfile(version);},0);
@@ -46,12 +49,12 @@ function App(){
   return()=>{active=false;authVersion.current++;subscription?.unsubscribe();client?.auth.stopAutoRefresh();if(auth===client)auth=null;};
  },[]);
  async function logout(){await run(async()=>{if(auth){const {error}=await auth.auth.signOut({scope:'local'});if(error)throw error;}authVersion.current++;token=null;clearAccount();});}
- async function refresh(){
-  const version=++refreshVersion.current,accessToken=token;
-  const current=()=>version===refreshVersion.current&&accessToken===token;
+ function refresh(){
+  const version=++refreshVersion.current,accessToken=token,owner=user?.id;
+  const current=()=>version===refreshVersion.current&&accessToken===token&&owner===activeAccount.current;
   const query=new URLSearchParams();Object.entries(filters).forEach(([k,v])=>{if(v)query.set(k,k==='maxPrice'?Number(v)*100:v);});
   if(position){query.set('lat',position.latitude);query.set('lng',position.longitude);}
-  try{
+  const work=(async()=>{try{
    const [ls,rs]=await Promise.all([api('/lots?'+query),api('/reservations')]);
    if(!current())return;
    if(merchant){
@@ -61,11 +64,16 @@ function App(){
     setShop(s);setProducts(p);setMetrics(m);setLotHistory(h);
    }
    setLots(ls);setReservations(rs);
-  }catch(e){if(current())throw e;}
+  }catch(e){if(current())throw e;}})();
+  const completion=work.then(()=>{
+   // Mutations must wait for a newer refresh before showing success, too.
+   if(!current()&&owner===activeAccount.current&&refreshInFlight.current!==completion)return refreshInFlight.current;
+  });
+  refreshInFlight.current=completion;return completion;
  }
  useEffect(()=>{if(user)run(refresh);},[user,filters,position,period,page]);
  useEffect(()=>{if(!user)return;const t=setInterval(()=>refresh().catch(()=>{}),30000);return()=>clearInterval(t);},[user,filters,position,period]);
- async function login(e){e.preventDefault();const d=Object.fromEntries(new FormData(e.target));await run(async()=>{if(config.local){token='local-'+d.role;setUser(await api('/me'));return;}if(d.action==='register'){if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}$/.test(d.password))throw new Error('Usá al menos 12 caracteres con mayúsculas, minúsculas, números y un símbolo.');const {error}=await auth.auth.signUp({email:d.email,password:d.password,options:{data:{name:d.name,role:d.role},emailRedirectTo:window.location.origin}});if(error)throw error;flash('Revisá tu correo para confirmar la cuenta antes de ingresar.');}else {const {error}=await auth.auth.signInWithPassword({email:d.email,password:d.password});if(error)throw new Error(error.code==='invalid_credentials'?'Correo o contraseña incorrectos.':error.message);}});}
+ async function login(e){e.preventDefault();const d=Object.fromEntries(new FormData(e.target));await run(async()=>{if(config.local){token='local-'+d.role;setAccount(await api('/me'));return;}if(d.action==='register'){if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}$/.test(d.password))throw new Error('Usá al menos 12 caracteres con mayúsculas, minúsculas, números y un símbolo.');const {error}=await auth.auth.signUp({email:d.email,password:d.password,options:{data:{name:d.name,role:d.role},emailRedirectTo:window.location.origin}});if(error)throw error;flash('Revisá tu correo para confirmar la cuenta antes de ingresar.');}else {const {error}=await auth.auth.signInWithPassword({email:d.email,password:d.password});if(error)throw new Error(error.code==='invalid_credentials'?'Correo o contraseña incorrectos.':error.message);}});}
  const [register,setRegister]=useState(false);
  if(!authReady)return <main className="auth-form" aria-busy="true"><p role="status">Restaurando tu sesión…</p></main>;
  if(recovering)return <main className="auth-form"><h2>Elegí una nueva contraseña</h2><form onSubmit={e=>{e.preventDefault();const password=new FormData(e.target).get('password');run(async()=>{if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}$/.test(password))throw new Error('Usá al menos 12 caracteres, mayúsculas, minúsculas, números y un símbolo.');const {error}=await auth.auth.updateUser({password});if(error)throw error;setRecovering(false);flash('Contraseña actualizada.');});}}><Field label="Nueva contraseña" name="password" type="password" required minLength={12}/><button className="primary" disabled={busy}>Guardar contraseña</button></form>{notice&&<p role="alert">{notice.text}</p>}</main>;

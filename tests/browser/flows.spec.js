@@ -33,3 +33,10 @@ test('consumidor cancela y ve el historial; una búsqueda anterior no reemplaza 
  await page.getByRole('textbox',{name:'Buscar ofertas'}).fill('Medialunas');await expect(page.locator('.lot-card').first()).toBeVisible();await (await oldResponse).finished();
  await expect(page.locator('.lot-card').first()).toBeVisible();await expect(page.getByRole('heading',{name:'Medialunas y criollos',exact:true})).toBeVisible();
 });
+
+test('la segunda reserva abre su código aunque la actualización de la lista sea lenta',async({page})=>{
+ let posts=0,reads=0;
+ await page.route('**/api/reservations',async route=>{if(route.request().method()==='POST')posts++;else if(posts===2&&++reads===2)await new Promise(r=>setTimeout(r,1000));await route.continue();});
+ await page.goto('/');await page.getByRole('button',{name:'Entrar a la demostración'}).click();await page.getByRole('button',{name:'Ver detalle'}).first().click();await page.getByRole('button',{name:'Confirmar reserva'}).click();await expect(page.getByRole('alert')).toContainText('Reserva confirmada');await page.getByRole('button',{name:'Ver reserva'}).first().click();await page.getByRole('button',{name:'Cancelar reserva',exact:true}).click();await page.getByRole('button',{name:'Confirmar cancelación'}).click();await expect(page.getByRole('alert')).toContainText('Reserva cancelada');
+ await page.getByRole('button',{name:'Explorar ofertas',exact:true}).click();await page.getByRole('button',{name:'Ver detalle'}).first().click();await page.getByRole('button',{name:'Confirmar reserva'}).click();await expect(page.getByRole('alert')).toContainText('Reserva confirmada');await page.getByRole('button',{name:'Ver reserva'}).first().click();await expect(page.locator('.pickup-code')).toBeVisible();expect(reads).toBeGreaterThanOrEqual(2);
+});
