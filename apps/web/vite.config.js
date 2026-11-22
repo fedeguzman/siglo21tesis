@@ -1,2 +1,4 @@
 import {defineConfig} from 'vite';
-export default defineConfig({server:{proxy:{'/api':'http://localhost:3001'}}});
+import {readFileSync} from 'node:fs';
+const {version}=JSON.parse(readFileSync(new URL('../../package.json',import.meta.url),'utf8'));
+export default defineConfig({define:{__APP_VERSION__:JSON.stringify(version)},server:{proxy:{'/api':'http://localhost:3001'}}});

@@ -20,7 +20,7 @@ export function createApp(db,{local=process.env.APP_MODE==='local',supabaseUrl=p
  // Render's ingress supplies the client address; trust only the nearest proxy.
  if(process.env.RENDER==='true')app.set('trust proxy',1);
  app.use(helmet());app.use(cors({origin:process.env.WEB_ORIGIN||'http://localhost:5173'}));app.use(express.json({limit:'100kb'}));
- app.use('/api',rateLimit({windowMs:60000,limit:180}));
+ app.use('/api',rateLimit({windowMs:60000,limit:180,message:{error:'Demasiadas solicitudes. Esperá un momento y volvé a intentar.'}}));
  app.get('/api/health',async(req,res)=>{await db.query('select 1');res.json({status:'ok',mode:local?'local':'supabase'});});
  if(local)app.use('/api/photos',express.static(photosDirectory,{dotfiles:'deny'}));
  app.get('/api/config',(req,res)=>res.json({local,supabaseUrl:local?null:supabaseUrl,supabaseKey:local?null:supabaseKey}));

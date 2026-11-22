@@ -11,10 +11,12 @@
     "test": "node --test tests/*.test.js",
     "start": "npm start -w apps/api",
     "test:e2e": "playwright test",
-    "test:postgres": "node scripts/test-postgres.mjs"
+    "test:postgres": "node scripts/test-postgres.mjs",
+    "test:auth-real": "node scripts/test-real-auth.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.65.1",
     "concurrently": "^10.0.7"
-  }
+  },
+  "version": "1.0.0"
 }

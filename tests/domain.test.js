@@ -36,3 +36,39 @@ test('Render limita solicitudes por cliente y no comparte el cupo del proxy',asy
   assert.equal(repeat.headers.get('x-ratelimit-remaining'),'178');
  }finally{await new Promise(r=>proxyServer.close(r));}
 });
+
+test('API completa comercio, catálogo, publicación, reserva concurrente, cancelación, retiro e historial',async()=>{
+ const request=async(path,method='GET',body,role='merchant')=>{const r=await fetch(base+'/api'+path,{method,headers:{Authorization:'Bearer local-'+role,'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});return {status:r.status,data:await r.json()};};
+ const saved=await request('/shop','PUT',{name:'Comercio API',phone:'3515551234',address:'Av. Colón 1000, Córdoba',description:'Prueba aislada',pickup_hours:'10 a 22',latitude:-31.4,longitude:-64.2,active:true});assert.equal(saved.status,200);
+ assert.equal((await request('/products','POST',{name:'Producto API',category:'Panadería',description:'Hecho hoy'})).status,201);
+ assert.equal((await request('/products')).data.length,1);
+ const input={name:'Lote API único',content:'Tres medialunas del día',category:'Panadería',photo:'/images/food-0.jpg',conservation:'Conservar en sitio fresco',original_price:10000,price:7000,total:1,pickup_start:new Date(Date.now()-60000).toISOString(),pickup_end:new Date(Date.now()+3600000).toISOString()};
+ const published=await request('/lots','POST',input);assert.equal(published.status,201);const id=published.data.id;
+ const offers=await request('/lots?q=Lote%20API%20%C3%BAnico&category=Panader%C3%ADa&maxPrice=7000&lat=-31.4&lng=-64.2&distance=1','GET',undefined,'consumer');assert.equal(offers.status,200);assert.equal(offers.data.length,1);assert.equal(offers.data[0].distance,0);
+ const attempts=await Promise.all([request('/reservations','POST',{lot_id:id,quantity:1},'consumer'),request('/reservations','POST',{lot_id:id,quantity:1},'consumer')]);assert.deepEqual(attempts.map(x=>x.status).sort(),[201,409]);const reservation=attempts.find(x=>x.status===201).data;
+ assert.equal((await request('/reservations/'+reservation.id+'/cancel','POST',{},'consumer')).status,200);
+ assert.equal((await request('/lots')).data.find(x=>x.id===id).available,1);
+ const next=await request('/reservations','POST',{lot_id:id,quantity:1},'consumer');assert.equal(next.status,201);
+ assert.equal((await request('/reservations/'+next.data.id+'/collect','POST',{code:'BAD'})).status,400);
+ assert.equal((await request('/reservations/'+next.data.id+'/collect','POST',{code:next.data.code})).status,200);
+ const events=await request('/reservations/'+next.data.id+'/events','GET',undefined,'consumer');assert.deepEqual(events.data.map(x=>x.status),['reserved','collected']);
+ const range=new URLSearchParams({from:new Date(Date.now()-86400000).toISOString(),to:new Date(Date.now()+60000).toISOString()});
+ assert.equal((await request('/history?'+range)).data.find(x=>x.id===id).reservations.length,2);
+ assert.equal((await request('/metrics?'+range)).data.collected,1);
+ assert.equal((await request('/shop','PUT',{},'consumer')).status,403);assert.equal((await request('/lots','POST',input,'consumer')).status,403);
+});
+
+test('API rechaza fotos inválidas y archivos mayores al límite',async()=>{
+ for(const [bytes,type] of [[Buffer.from('not-an-image'),'image/png'],[Buffer.alloc(5*1024*1024+1),'image/jpeg']]){
+  const form=new FormData();form.append('photo',new Blob([bytes],{type}),'invalid.jpg');
+  const response=await fetch(base+'/api/photos',{method:'POST',headers:{Authorization:'Bearer local-merchant'},body:form});assert.equal(response.status,400);
+ }
+});
+
+test('el límite de solicitudes devuelve un error JSON utilizable por el cliente',async()=>{
+ const app=createApp({query:async()=>({rows:[]})},{local:true});const limited=app.listen(0);await new Promise(r=>limited.once('listening',r));
+ try{const endpoint='http://localhost:'+limited.address().port+'/api/health';let response;for(let i=0;i<181;i++){response=await fetch(endpoint);await response.text();}
+  assert.equal(response.status,429);assert.match(response.headers.get('content-type'),/application\/json/);
+  const next=await fetch(endpoint);assert.match((await next.json()).error,/Demasiadas solicitudes/);
+ }finally{await new Promise(r=>limited.close(r));}
+});

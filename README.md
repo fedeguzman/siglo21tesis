@@ -25,7 +25,7 @@ Las pruebas de navegador crean reservas y retiros en la base local de demostraci
 ## Supabase, Render y Vercel
 
 1. Crear o reutilizar un proyecto Supabase. Guardar `DATABASE_URL` (conexión PostgreSQL o session pooler con TLS), `SUPABASE_URL` y `SUPABASE_ANON_KEY` en las variables seguras del backend. Nunca usar el service role key en el navegador. El acceso a las tablas de negocio pasa por la API; RLS está habilitado sin políticas de acceso directo.
-2. Configurar Supabase Auth: confirmación de correo obligatoria, contraseña de 12 caracteres con mayúscula, minúscula, número y símbolo, access token de una hora, Site URL y redirect URL iguales a la URL del frontend. Deshabilitar registro anónimo. Configurar SMTP para envío real. Las sesiones del frontend se mantienen en memoria.
+2. Configurar Supabase Auth: confirmación de correo obligatoria, contraseña de 12 caracteres con mayúscula, minúscula, número y símbolo, access token de una hora, Site URL y redirect URL iguales a la URL del frontend. Deshabilitar registro anónimo. Configurar SMTP para envío real. Supabase conserva la sesión del frontend en el almacenamiento del navegador y renueva el token. Cerrar sesión borra esa sesión y limpia los datos de la cuenta en pantalla.
 3. Ejecutar `npm run migrate -w apps/api` con `DATABASE_URL` en el entorno. La migración inicial es idempotente y no contiene datos simulados. En Supabase también se aplica la migración 002, que crea el bucket público de fotos y permite escrituras en la carpeta del usuario autenticado. Usar un usuario de base limitado para la API en producción; el usuario de migración debe poder crear tablas y habilitar RLS.
 4. Render: usar `render.yaml` para el backend. Completar sus variables y `WEB_ORIGIN` con el origen exacto de Vercel. Build `npm ci`; start `npm start`; comprobar `/api/health`. `APP_MODE=supabase`, `NODE_ENV=production`. El cron interno controla vencimientos cada 30 segundos y cada solicitud vuelve a controlar la vigencia; las transacciones rechazan reservas/retiros vencidos aunque el proceso haya estado detenido.
 5. Vercel: importar el monorepo desde su raíz, usar `vercel.json` y definir `VITE_API_URL` con el origen HTTPS de Render antes del build. Se obtiene la configuración pública de Supabase de `/api/config`; ninguna credencial de base se incorpora al bundle.
@@ -48,3 +48,9 @@ El frontend está publicado en [Vercel](https://siglo21tesis.vercel.app/) y la [
 - Una consulta directa a Nominatim para Córdoba devolvió un resultado desde el entorno de validación. Falta probarla a través de la API desplegada.
 
 Para retomar desde otra sesión, leer primero [`docs/CONTINUAR.md`](docs/CONTINUAR.md).
+
+## Versión 1.0.0 y revisión integral
+
+La versión se muestra en el pie de la aplicación. La causa de la pérdida de sesión era `persistSession:false`; se corrigieron además la restauración inicial, las respuestas fuera de orden, la actualización al navegar y los errores no JSON. Ver [revisión y cobertura](docs/REVISION_1.0.0.md).
+
+`npm run test:auth-real` levanta frontend y API locales con una base en memoria y Supabase Auth real. Requiere `REVIEW_MERCHANT_EMAIL`, `REVIEW_MERCHANT_PASSWORD`, `REVIEW_CONSUMER_EMAIL` y `REVIEW_CONSUMER_PASSWORD` en el entorno, y Chromium instalado (o `CHROMIUM_PATH`). No modifica datos de negocio de producción ni cambia contraseñas; comprueba ambas cuentas, persistencia, geocodificación, reserva, cancelación, retiro e historial. Usar los puertos locales 3001 y 5173 libres. Nunca guardar esas credenciales en Git.

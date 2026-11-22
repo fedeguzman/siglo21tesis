@@ -13,3 +13,23 @@ test('comercio publica un lote con foto propia, lo edita y cierra sin perder his
  const card=page.locator('.lot-card').filter({has:page.getByRole('heading',{name,exact:true})});await expect(card).toBeVisible();await card.getByRole('button',{name:'Editar',exact:true}).click();await dialog.getByLabel('Cantidad total de lotes').fill('2');await dialog.getByRole('button',{name:'Guardar publicación'}).click();await expect(card.getByText('2 disponibles')).toBeVisible();await card.getByRole('button',{name:'Cerrar',exact:true}).click();await dialog.getByRole('button',{name:'Confirmar cierre'}).click();await expect(card.locator('.badge')).toHaveText('Cerrado');
  await page.getByRole('button',{name:'Historial e indicadores'}).click();await expect(page.locator('summary').filter({hasText:name})).toBeVisible();
 });
+
+test('catálogo y datos del comercio se guardan y reaparecen al ingresar',async({page})=>{
+ await page.goto('/');await page.locator('select[name="role"]').selectOption('merchant');await page.getByRole('button',{name:'Entrar a la demostración'}).click();
+ await page.getByRole('button',{name:'Mi comercio',exact:true}).click();await page.getByLabel('Teléfono').fill('3515551234');await page.getByRole('button',{name:'Guardar datos',exact:true}).click();await expect(page.getByRole('alert')).toContainText('se guardaron');
+ await page.getByRole('button',{name:'Catálogo',exact:true}).click();await page.getByRole('button',{name:'Agregar producto',exact:true}).click();const dialog=page.getByRole('dialog');const name='Producto de validación '+Date.now();
+ await dialog.getByLabel('Nombre',{exact:true}).fill(name);await dialog.getByLabel('Descripción').fill('Producto de prueba local');await dialog.getByRole('button',{name:'Guardar producto'}).click();await expect(page.getByRole('heading',{name,exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'Cerrar sesión',exact:true}).first().click();await page.locator('select[name="role"]').selectOption('merchant');await page.getByRole('button',{name:'Entrar a la demostración'}).click();
+ await page.getByRole('button',{name:'Mi comercio',exact:true}).click();await expect(page.getByLabel('Teléfono')).toHaveValue('3515551234');await page.getByRole('button',{name:'Catálogo',exact:true}).click();await expect(page.getByRole('heading',{name,exact:true})).toBeVisible();
+});
+
+test('consumidor cancela y ve el historial; una búsqueda anterior no reemplaza el filtro actual',async({page})=>{
+ await page.goto('/');await page.getByRole('button',{name:'Entrar a la demostración'}).click();await page.getByRole('button',{name:'Ver detalle'}).first().click();await page.getByRole('button',{name:'Confirmar reserva'}).click();await expect(page.getByRole('alert')).toContainText('Reserva confirmada');
+ await page.getByRole('button',{name:'Ver reserva'}).first().click();await page.getByRole('button',{name:'Cancelar reserva',exact:true}).click();await page.getByRole('button',{name:'Confirmar cancelación'}).click();await expect(page.getByRole('alert')).toContainText('Reserva cancelada');
+ await page.getByRole('button',{name:'Mi historial',exact:true}).click();await expect(page.locator('tbody .badge.cancelled').first()).toBeVisible();await page.getByRole('button',{name:'Explorar ofertas',exact:true}).click();
+ await page.route('**/api/lots?*',async route=>{if(new URL(route.request().url()).searchParams.get('q')==='inexistente-lento')await new Promise(r=>setTimeout(r,700));await route.continue();});
+ const oldResponse=page.waitForResponse(r=>r.url().includes('q=inexistente-lento'));
+ const started=page.waitForRequest(r=>r.url().includes('q=inexistente-lento'));await page.getByRole('textbox',{name:'Buscar ofertas'}).fill('inexistente-lento');await started;
+ await page.getByRole('textbox',{name:'Buscar ofertas'}).fill('Medialunas');await expect(page.locator('.lot-card').first()).toBeVisible();await (await oldResponse).finished();
+ await expect(page.locator('.lot-card').first()).toBeVisible();await expect(page.getByRole('heading',{name:'Medialunas y criollos',exact:true})).toBeVisible();
+});

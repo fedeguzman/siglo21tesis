@@ -1,0 +1,55 @@
+import {spawn} from 'node:child_process';
+import {createDatabase} from '../apps/api/src/db.js';
+import {createApp} from '../apps/api/src/app.js';
+import {chromium,expect} from '@playwright/test';
+const root=new URL('../',import.meta.url).pathname;
+for(const key of ['REVIEW_MERCHANT_EMAIL','REVIEW_MERCHANT_PASSWORD','REVIEW_CONSUMER_EMAIL','REVIEW_CONSUMER_PASSWORD'])if(!process.env[key])throw new Error('Falta la variable '+key);
+const config=await (await fetch('https://excedentes-api.onrender.com/api/config',{signal:AbortSignal.timeout(120000)})).json();
+process.env.APP_MODE='local';process.env.WEB_ORIGIN='http://localhost:5173';
+const db=await createDatabase({localPath:'memory://'});
+const api=createApp(db,{local:false,supabaseUrl:config.supabaseUrl,supabaseKey:config.supabaseKey}).listen(3001,'127.0.0.1');
+await new Promise(r=>api.once('listening',r));
+const vite=spawn(process.execPath,[root+'node_modules/vite/bin/vite.js','--host','127.0.0.1','--port','5173','--strictPort'],{cwd:root+'apps/web',stdio:'ignore',env:process.env});
+let browser;
+try{
+ for(let i=0;i<80;i++){try{const r=await fetch('http://localhost:5173/api/config');if(r.ok)break;}catch{}await new Promise(r=>setTimeout(r,100));}
+ browser=await chromium.launch({...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{}),headless:true});
+ const context=await browser.newContext();let page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('http://localhost:5173');
+ await page.getByLabel('Correo electrónico').fill(process.env.REVIEW_MERCHANT_EMAIL);
+ await page.getByLabel('Contraseña',{exact:true}).fill(process.env.REVIEW_MERCHANT_PASSWORD);
+ await page.getByRole('button',{name:'Iniciar sesión',exact:true}).click();
+ await expect(page.getByRole('heading',{name:'Así va tu comercio'})).toBeVisible({timeout:20000});
+ console.log('Cuenta real: autenticación y perfil correctos contra servidor local con datos aislados.');
+ await page.reload();await expect(page.getByRole('heading',{name:'Así va tu comercio'})).toBeVisible();
+ const state=await context.storageState();await context.close();
+ const reopened=await browser.newContext({storageState:state});page=await reopened.newPage();page.on('pageerror',e=>errors.push(e.message));await page.goto('http://localhost:5173');
+ await expect(page.getByRole('heading',{name:'Así va tu comercio'})).toBeVisible();
+ console.log('Cuenta real: sesión conservada al recargar y al reabrir el contexto del navegador.');
+ await page.getByRole('button',{name:'Mi comercio',exact:true}).click();
+ await page.getByLabel('Nombre comercial').fill('Comercio de validación local');
+ await page.getByLabel('Teléfono').fill('3515550100');
+ await page.getByLabel('Dirección',{exact:true}).fill('Av. Colón 1000, Córdoba, Argentina');
+ await page.getByRole('button',{name:'Validar dirección'}).click();
+ await expect(page.locator('.address-result').first()).toBeVisible({timeout:20000});
+ await page.locator('.address-result').first().click();
+ await page.getByRole('button',{name:'Guardar datos',exact:true}).click();
+ await expect(page.getByRole('alert')).toContainText('se guardaron');
+ console.log('Cuenta real: geocodificación y alta de comercio guardadas únicamente en base local.');
+ for(const name of ['Catálogo','Historial e indicadores','Reservas']){await page.getByRole('button',{name:new RegExp('^'+name)}).first().click();await expect(page.locator('main.content')).toBeVisible();}
+ await page.getByRole('button',{name:'Resumen',exact:true}).click();await page.getByRole('button',{name:'Publicar lote',exact:true}).click();const dialog=page.getByRole('dialog');
+ await dialog.getByLabel('Nombre del lote').fill('Lote local integrado');await dialog.getByLabel('Contenido del lote').fill('Dos porciones preparadas hoy');await dialog.getByLabel('Precio habitual ($)').fill('6000');await dialog.getByLabel('Precio del lote ($)').fill('4500');await dialog.getByLabel('Cantidad total de lotes').fill('2');await dialog.getByLabel('Condiciones de conservación').fill('Mantener refrigerado y consumir hoy');
+ const dt=d=>new Date(d-new Date(d).getTimezoneOffset()*60000).toISOString().slice(0,16);
+ await dialog.getByLabel('Inicio del retiro').fill(dt(Date.now()-60000));await dialog.getByLabel('Fin del retiro').fill(dt(Date.now()+3600000));await dialog.getByRole('button',{name:'Guardar publicación'}).click();await expect(page.getByRole('alert')).toContainText('Publicación guardada');
+ let consumerContext=await browser.newContext();let consumer=await consumerContext.newPage();consumer.on('pageerror',e=>errors.push(e.message));await consumer.goto('http://localhost:5173');await consumer.getByLabel('Correo electrónico').fill(process.env.REVIEW_CONSUMER_EMAIL);await consumer.getByLabel('Contraseña',{exact:true}).fill(process.env.REVIEW_CONSUMER_PASSWORD);await consumer.getByRole('button',{name:'Iniciar sesión',exact:true}).click();await expect(consumer.getByRole('heading',{name:'Algo rico merece otra oportunidad.'})).toBeVisible({timeout:20000});
+ await consumer.reload();await expect(consumer.getByRole('heading',{name:'Algo rico merece otra oportunidad.'})).toBeVisible();const consumerState=await consumerContext.storageState();await consumerContext.close();consumerContext=await browser.newContext({storageState:consumerState});consumer=await consumerContext.newPage();consumer.on('pageerror',e=>errors.push(e.message));await consumer.goto('http://localhost:5173');await expect(consumer.getByRole('heading',{name:'Algo rico merece otra oportunidad.'})).toBeVisible();
+ await consumer.getByRole('textbox',{name:'Buscar ofertas'}).fill('Lote local integrado');await consumer.getByRole('button',{name:'Ver detalle'}).first().click();await consumer.getByRole('button',{name:'Confirmar reserva'}).click();await expect(consumer.getByRole('alert')).toContainText('Reserva confirmada');await consumer.getByRole('button',{name:'Ver reserva'}).first().click();await consumer.getByRole('button',{name:'Cancelar reserva',exact:true}).click();await consumer.getByRole('button',{name:'Confirmar cancelación'}).click();await expect(consumer.getByRole('alert')).toContainText('Reserva cancelada');
+ await consumer.getByRole('button',{name:'Explorar ofertas',exact:true}).click();await consumer.getByRole('button',{name:'Ver detalle'}).first().click();await consumer.getByRole('button',{name:'Confirmar reserva'}).click();await expect(consumer.getByRole('alert')).toContainText('Reserva confirmada');await consumer.getByRole('button',{name:'Ver reserva'}).first().click();const code=await consumer.locator('.pickup-code').innerText();
+ await page.getByRole('button',{name:/^Reservas/}).first().click();await page.getByRole('button',{name:'Ver reserva'}).first().click();await page.getByLabel('Código presentado por el consumidor').fill(code);await page.getByRole('button',{name:'Confirmar entrega'}).click();await expect(page.getByRole('alert')).toContainText('Entrega confirmada');
+ await consumer.getByRole('button',{name:'Cerrar',exact:true}).click();await consumer.getByRole('button',{name:'Mi historial',exact:true}).click();await expect(consumer.locator('tbody .badge.collected').first()).toBeVisible();await expect(consumer.locator('tbody .badge.cancelled').first()).toBeVisible();
+ await consumer.getByRole('button',{name:'Cerrar sesión',exact:true}).first().click();await consumer.reload();await expect(consumer.getByRole('button',{name:'Iniciar sesión',exact:true})).toBeEnabled();await consumerContext.close();
+ console.log('Ambas cuentas reales: persistencia de consumidor, reserva, cancelación, retiro e historial validados de punta a punta con datos exclusivamente locales.');
+ await page.getByRole('button',{name:'Cerrar sesión',exact:true}).first().click();await expect(page.getByRole('button',{name:'Iniciar sesión',exact:true})).toBeEnabled();
+ await page.reload();await expect(page.getByRole('button',{name:'Iniciar sesión',exact:true})).toBeEnabled();
+ expect(errors).toEqual([]);console.log('Cuenta real: navegación y cierre de sesión comprobados; sin errores de navegador.');
+}finally{await browser?.close();vite.kill('SIGTERM');await new Promise(r=>api.close(r));await db.close();}

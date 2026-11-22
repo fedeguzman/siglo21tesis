@@ -1,5 +1,13 @@
 # Continuar el desarrollo de Excedentes
 
+## Revisión 1.0.0
+
+Se corrigió la pérdida de sesión del frontend (`persistSession:false`), la restauración inicial y el descarte de respuestas tardías. La sesión se conserva al recargar/reabrir y se cierra en las pestañas de la misma sesión; logout limpia los datos, ubicación y filtros de la cuenta. Se actualizan datos al navegar y se explican los errores HTML/429 sin errores técnicos de JSON.
+
+Antes de publicar esta versión se ejecutaron doce pruebas de API/dominio en PGlite y PostgreSQL local real, trece pruebas de Chrome y un recorrido con las dos cuentas reales suministradas por el usuario, usando frontend, API y datos de negocio aislados en local. El flujo real incluye persistencia de ambos roles, dirección geocodificada, publicación, reserva, cancelación, retiro e historial. No hay credenciales de prueba en el repositorio. El script reproducible es `npm run test:auth-real`; recibe las variables de entorno indicadas en README.
+
+La versión está en `package.json` y se muestra en el pie de página. Ver `docs/REVISION_1.0.0.md` para alcance y límites de la validación. La publicación debe seguir a las comprobaciones locales, nunca anticiparse a ellas. Tras el push, verificar CI, Vercel READY y Render live para el commit publicado y repetir la persistencia con ambas cuentas por HTTPS.
+
 ## Objetivo y decisiones
 
 Sistema de tesis de Federico Guzmán: aplicaciones React de comercio y consumidor, PostgreSQL/Auth/Storage en Supabase, Express en Render y frontend en Vercel. Leer también `docs/alcance.md` y `docs/tesis.txt`; las referencias originales están en `docs/referencias/`.
