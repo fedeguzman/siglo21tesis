@@ -1,5 +1,13 @@
 # Continuar el desarrollo de Excedentes
 
+## Consumidor mobile 1.1.0
+
+La sección de consumidor usa `Consumer.jsx` y `consumer.css`, basados en `docs/referencias/consumidor.html`. Tiene navegación inferior fija (Explorar, Reservas, Historial, Cuenta), ofertas de una columna, categorías horizontales, filtros en un panel, detalle del lote, confirmación con cantidad/total, comprobante con código, tarjetas de reservas activas/finalizadas, historial por período y cuenta. El contenido ocupa el ancho del teléfono hasta 430 px y mantiene la composición de teléfono centrada en pantallas grandes. El comercio conserva su panel.
+
+La autenticación y los datos siguen usando la integración existente. Se carga el componente de consumidor solo al entrar con ese rol. Se mantienen las validaciones y la autorización en la API. Las ventanas de detalle retienen el foco, permiten Escape y bloquean la interacción con el fondo; los botones inferiores contemplan el área segura del teléfono. Los horarios se muestran en formato de 24 horas.
+
+La validación local incluye 21 pruebas de navegador y 12 pruebas de API/dominio. Comprueba anchos 320/390/430/768/1280, barra inferior horizontal, tarjetas de una columna, ausencia de desbordamiento, filtros/geolocalización, foco de teclado, cantidad, reserva/código/cancelación/historial y el flujo de entrega del comercio. La suite usa una base en memoria nueva por ejecución para no consumir el stock de corridas anteriores. Ver el informe para el estado de despliegue y la verificación HTTPS. SMTP y respaldos externos siguen pendientes por decisión previa; todos los servicios conservan planes gratuitos.
+
 ## Revisión 1.0.1 (base 1.0.0)
 
 Se corrigió la pérdida de sesión del frontend (`persistSession:false`), la restauración inicial y el descarte de respuestas tardías. La sesión se conserva al recargar/reabrir y se cierra en las pestañas de la misma sesión; logout limpia los datos, ubicación y filtros de la cuenta. Se actualizan datos al navegar y se explican los errores HTML/429 sin errores técnicos de JSON.
@@ -12,7 +20,7 @@ Ver `docs/REVISION_1.0.0.md` para alcance y límites. La publicación debe segui
 
 El recorrido real de 1.0.1 ya terminó correctamente con ambas cuentas, incluyendo foto en Storage, publicación, reserva, cancelación, retiro e historial. La base confirmó que el lote QA `e9717333-6c7f-4076-9e2e-52d0f0d6ddd7` quedó cerrado, con una reserva cancelada, una retirada y cero activas. La sesión del consumidor renovó un token realmente por HTTPS. Se cerraron las sesiones usadas para la prueba. El ajuste posterior de la suite solo aísla cuotas entre escenarios y no cambia el código de aplicación de la etiqueta v1.0.1.
 
-Siguiente objetivo solicitado por el usuario: llevar la sección del consumidor a la experiencia mobile del prototipo original `docs/referencias/consumidor.html`, incluyendo navegación, distribución e interacción. La prueba actual de móvil solo comprueba ausencia de desbordamiento; no acredita fidelidad al prototipo. No crear otro objetivo hasta cerrar los controles de la revisión actual. Mantener la validación local antes del despliegue y los planes gratuitos.
+El siguiente objetivo de consumidor mobile se implementa en 1.1.0; ver la sección inicial y `docs/REVISION_1.1.0.md`.
 
 ## Objetivo y decisiones
 

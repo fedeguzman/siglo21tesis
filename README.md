@@ -49,6 +49,10 @@ El frontend está publicado en [Vercel](https://siglo21tesis.vercel.app/) y la [
 
 Para retomar desde otra sesión, leer primero [`docs/CONTINUAR.md`](docs/CONTINUAR.md).
 
+## Consumidor mobile 1.1.0
+
+La experiencia de consumidor sigue el [prototipo mobile](docs/referencias/consumidor.html): ofertas de una columna, navegación inferior, detalle y confirmación, código de retiro, reservas en tarjetas, historial y cuenta. El panel de comercios mantiene su interfaz. Ver [alcance y validación](docs/REVISION_1.1.0.md).
+
 ## Versiones 1.0.0/1.0.1 y revisión integral
 
 La versión se muestra en el pie de la aplicación. La causa de la pérdida de sesión era `persistSession:false`; se corrigieron además la restauración inicial, las respuestas fuera de orden, la actualización al navegar y los errores no JSON. Ver [revisión y cobertura](docs/REVISION_1.0.0.md).
